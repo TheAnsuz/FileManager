@@ -4,7 +4,12 @@ import java.io.File;
 import java.io.IOException;
 
 public final class FileManager {
+	
+	public static long getFreeSpace() {
+		return 0;
 
+	}
+	
 	/**
 	 * Obtains the respective {@code FileParser} given the name of the file that
 	 * must be obtained.

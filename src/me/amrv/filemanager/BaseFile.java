@@ -199,21 +199,86 @@ public abstract class BaseFile {
 	 * @return the path from the disk to the file without the name of the file
 	 */
 	public final String getWholeParent() {
-		return file.getAbsolutePath().replace(SEPARATOR + file.getName(), "");
+		final String parent = file.getAbsolutePath();
+		String formattedParent = "";
+
+		boolean filename = true;
+		int remove = 0;
+		for (int i = parent.length() - 1; i >= 0; i--) {
+
+			final char c = parent.charAt(i);
+
+			// Removes the name of the file among the separator that contains it
+			if (filename)
+				if (c == SEPARATOR) {
+					filename = false;
+					continue;
+				} else
+					continue;
+
+			// Checks if the text is a \.. and adds it to the removal queue
+			if (c == '.' && parent.charAt(i - 1) == '.' && parent.charAt(i - 2) == SEPARATOR) {
+				i -= 2;
+				remove++;
+			} else {
+
+				// Checks if the character must be in the path and prints it or leaves it
+				if (remove > 0)
+					if (c == SEPARATOR)
+						remove--;
+					else
+						continue;
+				else
+					formattedParent = parent.charAt(i) + formattedParent;
+			}
+		}
+		return formattedParent;
 	}
 
 	/**
 	 * Retrieves the last folder to reach the file working as
 	 * {@code getWholeParent()} but returning only the last section of the path
+	 * almost as a section of the cannonical path
 	 * 
 	 * @return the last section of the path to reach the file
 	 */
 	public final String getLastParent() {
-		final String parent = getWholeParent();
-		if (parent.contains(SEPARATOR + "")) {
-			return parent.substring(parent.lastIndexOf(SEPARATOR) + 1);
-		} else
-			return "";
+		final String parent = file.getAbsolutePath();
+		String formattedParent = "";
+
+		boolean filename = true;
+		int remove = 0;
+		for (int i = parent.length() - 1; i >= 0; i--) {
+
+			final char c = parent.charAt(i);
+
+			if (filename)
+				if (c == SEPARATOR) {
+					filename = false;
+					continue;
+				} else
+					continue;
+
+			if (c == '.' && parent.charAt(i - 1) == '.' && parent.charAt(i - 2) == SEPARATOR) {
+				i -= 2;
+				remove++;
+			} else {
+
+				if (remove <= 0) {
+					
+					if (c == SEPARATOR)
+						break;
+					else
+						formattedParent = parent.charAt(i) + formattedParent;
+				} else 
+					if (c == SEPARATOR)
+						remove--;
+					else
+						continue;
+
+			}
+		}
+		return formattedParent;
 	}
 
 	// el maximo de espacio en el disco o particion de disco del archivo,
