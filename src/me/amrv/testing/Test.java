@@ -47,6 +47,9 @@ public class Test {
 			file.setCreationTime(-922337203685477580l);
 			file.setLastModifiedTime(0l);
 			file.setLastAccessTime(922337203685477580l);
+			// Funcionalidad con:
+			// Directorios
+			// Links a archivos
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
