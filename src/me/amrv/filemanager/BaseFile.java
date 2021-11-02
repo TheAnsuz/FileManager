@@ -2,11 +2,16 @@ package me.amrv.filemanager;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.FileVisitOption;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributeView;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public abstract class BaseFile {
 
@@ -45,6 +50,13 @@ public abstract class BaseFile {
         return setFileAttributes() && attributes != null;
     }
 
+    /**
+     * Obtains the cannonical path from a file using a simple method, this is
+     * only to be used it any error occurs obtaining the default cannonical path
+     *
+     * @param parent the abstract or full path of the file
+     * @return a cannonical like conversion of the path
+     */
     private static String canonicalize(final String parent) {
         String formattedParent = "";
 
@@ -69,15 +81,21 @@ public abstract class BaseFile {
         }
         return formattedParent;
     }
-    
+
+    /**
+     * Reads the file attributes to make sure they are accesible
+     *
+     * @return true if the attributes can be read
+     */
     private boolean setFileAttributes() {
-        if (attribute == null) 
+        if (attribute == null)
             return false;
-        
+
         try {
             attributes = attribute.readAttributes();
             return true;
         } catch (IOException x) {
+            Logger.getLogger(BaseFile.class.getName()).log(Level.SEVERE, null, x);
             return false;
         }
     }
@@ -136,7 +154,7 @@ public abstract class BaseFile {
      *
      * <p>
      * In example a file at <b>temp/files/file.info</b> but declared as
-     * <b>file.info<b> wont return the whole path, if you want the whole path
+     * <b>file.info</b> wont return the whole path, if you want the whole path
      * use {@code getAbstractPath()} or {@code getCannonicalPath()} and if you
      * want just the path to reach the file without the file name use
      * {@code getParent()} or {@code getLastParent()}
@@ -191,16 +209,14 @@ public abstract class BaseFile {
      * @return the absolute path from the disk to the file in the system, no
      * matter how it was defined
      *
-     * @throws IOException - if any error occurs obtaining the file
      */
     public final String getCannonicalPath() {
         try {
             return file.getCanonicalPath();
         } catch (IOException x) {
-
-            x.printStackTrace();
+            return canonicalize(file.getAbsolutePath());
         }
-        return canonicalize(file.getAbsolutePath());
+
     }
 
     // raiz en la que esta situado el archivo
@@ -442,8 +458,7 @@ public abstract class BaseFile {
      * Changes the readable flag of the file allowing or disallowing it to do
      * read operations
      *
-     * @param readable - if the file should be able to do read operations or
-     * not
+     * @param readable - if the file should be able to do read operations or not
      * @param ownerOnly - if this operation should be applied to the current
      * user/owner or to everybody
      */
@@ -564,10 +579,10 @@ public abstract class BaseFile {
      * Deletes the file or directory
      * <p>
      * If the file points to a directory it will only be removed if its empty
+     * <p>
+     * An IOException could be thrown for debugging purposes
      *
      * @return true if the operation was successfully completed false otherwise
-     * @throws IOException if any error occurs while removing it (this is
-     * hardcoded to be thrown)
      */
     public final boolean delete() {
         return file.delete();
@@ -582,11 +597,20 @@ public abstract class BaseFile {
      *
      * @return true is the operation was successfully completed
      */
-    @Deprecated
     public final boolean forceDelete() {
-        // Cerrar los streams si estan abiertos
-        // Si es una carpeta eliminar todos los archivos y luego la carpeta
-        throw new UnsupportedOperationException("FoceDelete is not yet implemented");
+        if (file.isDirectory()) {
+            try {
+                Files.walk(file.toPath(), FileVisitOption.FOLLOW_LINKS)
+                        .sorted(Comparator.reverseOrder())
+                        .map(Path::toFile)
+                        .forEach(File::delete);
+            } catch (IOException ex) {
+                Logger.getLogger(BaseFile.class.getName()).log(Level.SEVERE, null, ex);
+                return false;
+            }
+        } else
+            return file.delete();
+        return true;
     }
 
     /**
@@ -681,7 +705,7 @@ public abstract class BaseFile {
 			try {
             attribute.setTimes(null, null, FileTime.fromMillis(miliseconds));
         } catch (IOException x) {
-            x.printStackTrace();
+            Logger.getLogger(BaseFile.class.getName()).log(Level.SEVERE, null, x);
         } else {
             throw new UnsupportedOperationException("Cant modify file attributes");
         }
@@ -733,7 +757,7 @@ public abstract class BaseFile {
 			try {
             attribute.setTimes(null, FileTime.fromMillis(miliseconds), null);
         } catch (IOException x) {
-            x.printStackTrace();
+            Logger.getLogger(BaseFile.class.getName()).log(Level.SEVERE, null, x);
         } else {
             throw new UnsupportedOperationException("Cant modify file attributes");
         }
