@@ -10,11 +10,16 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public abstract class BaseFile {
 
+    /*
+        Absolute path - empieza desde la raiz del sistema o unidad de disco ( \ o C:\)
+        ./ - indica la misma carpeta (./file = file)
+        x/file - indica una subcarpeta (carpeta/file)
+        ../ - indica que esta un nivel por encima del marcado
+        
+     */
     /**
      * The system-dependant separator used on the paths
      */
@@ -57,18 +62,55 @@ public abstract class BaseFile {
      * @param parent the abstract or full path of the file
      * @return a cannonical like conversion of the path
      */
-    private static String canonicalize(final String parent) {
+    public final static String canonicalize2(final String parent, int amount) {
         String formattedParent = "";
+        int index = 0;
+        int remove = 0;
 
+        for (int i = 0; i < parent.length(); i++) {
+            final char c = parent.charAt(i);
+
+            // Pointer to subdirectory
+            if (c == SEPARATOR)
+                if (parent.charAt(i - 1) == '.' && parent.charAt(i - 2) == '.') {
+                    remove++;
+                    continue;
+                } else if (parent.charAt(i - 1) == '.') {
+                    i++;
+                    continue;
+                } else
+                    index++;
+
+            if (remove > 0)
+                continue;
+            else
+                formattedParent += c;
+
+        }
+        return formattedParent;
+    }
+
+    public final static String canonicalize(final String parent, int amount) {
+        String formattedParent = "";
+        int index = 0;
         int remove = 0;
         for (int i = parent.length() - 1; i >= 0; i--) {
             final char c = parent.charAt(i);
 
-            // Checks if the text is a \.. and queues the removal
+            // Checks if the text is a ../ and queues the removal
             if (c == '.' && parent.charAt(i - 1) == '.' && parent.charAt(i - 2) == SEPARATOR) {
                 i -= 2;
                 remove++;
+                // Checks if the texts is a ./ and ignores it
+            } else if (c == '.' && parent.charAt(i - 1) == SEPARATOR) {
+                i -= 1;
             } else {
+
+                if (c == SEPARATOR)
+                    index++;
+
+                if (amount > 0 && index >= amount)
+                    break;
 
                 // Checks if the character must be in the path and prints it or leaves it
                 if (remove > 0) {
@@ -80,6 +122,10 @@ public abstract class BaseFile {
             }
         }
         return formattedParent;
+    }
+
+    public final static String canonicalize(final String parent) {
+        return BaseFile.canonicalize(parent, -1);
     }
 
     /**
@@ -95,8 +141,7 @@ public abstract class BaseFile {
             attributes = attribute.readAttributes();
             return true;
         } catch (IOException x) {
-            Logger.getLogger(BaseFile.class.getName()).log(Level.SEVERE, null, x);
-            return false;
+            throw new RuntimeException(x);
         }
     }
 
@@ -214,6 +259,7 @@ public abstract class BaseFile {
         try {
             return file.getCanonicalPath();
         } catch (IOException x) {
+            System.out.println(x);
             return canonicalize(file.getAbsolutePath());
         }
 
@@ -244,39 +290,11 @@ public abstract class BaseFile {
      */
     public final String getWholeParent() {
         final String parent = file.getAbsolutePath();
-        String formattedParent = "";
+        String formattedParent = BaseFile.canonicalize(parent);
 
         boolean filename = true;
         int remove = 0;
-        for (int i = parent.length() - 1; i >= 0; i--) {
 
-            final char c = parent.charAt(i);
-
-            // Removes the name of the file among the separator that contains it
-            if (filename) {
-                if (c == SEPARATOR) {
-                    filename = false;
-                    continue;
-                } else {
-                    continue;
-                }
-            }
-
-            // Checks if the text is a \.. and adds it to the removal queue
-            if (c == '.' && parent.charAt(i - 1) == '.' && parent.charAt(i - 2) == SEPARATOR) {
-                i -= 2;
-                remove++;
-            } else {
-
-                // Checks if the character must be in the path and prints it or leaves it
-                if (remove > 0) {
-                    if (c == SEPARATOR)
-                        remove--;
-                } else {
-                    formattedParent = parent.charAt(i) + formattedParent;
-                }
-            }
-        }
         return formattedParent;
     }
 
@@ -605,8 +623,7 @@ public abstract class BaseFile {
                         .map(Path::toFile)
                         .forEach(File::delete);
             } catch (IOException ex) {
-                Logger.getLogger(BaseFile.class.getName()).log(Level.SEVERE, null, ex);
-                return false;
+                throw new RuntimeException(ex);
             }
         } else
             return file.delete();
@@ -702,10 +719,10 @@ public abstract class BaseFile {
      */
     public final void setCreationTime(long miliseconds) {
         if (canAccessAttributes())
-			try {
+        try {
             attribute.setTimes(null, null, FileTime.fromMillis(miliseconds));
         } catch (IOException x) {
-            Logger.getLogger(BaseFile.class.getName()).log(Level.SEVERE, null, x);
+            throw new RuntimeException(x);
         } else {
             throw new UnsupportedOperationException("Cant modify file attributes");
         }
@@ -754,10 +771,10 @@ public abstract class BaseFile {
      */
     public final void setLastAccessTime(long miliseconds) {
         if (canAccessAttributes())
-			try {
+        try {
             attribute.setTimes(null, FileTime.fromMillis(miliseconds), null);
         } catch (IOException x) {
-            Logger.getLogger(BaseFile.class.getName()).log(Level.SEVERE, null, x);
+            throw new RuntimeException(x);
         } else {
             throw new UnsupportedOperationException("Cant modify file attributes");
         }
