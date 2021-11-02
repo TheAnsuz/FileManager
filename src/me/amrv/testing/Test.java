@@ -2,7 +2,6 @@ package me.amrv.testing;
 
 import java.io.File;
 import java.util.Scanner;
-
 import me.amrv.filemanager.FileManager;
 import me.amrv.filemanager.PlainFile;
 import me.amrv.filemanager.SafeFileOperation;
@@ -15,7 +14,7 @@ public class Test {
 	@SafeFileOperation
 	public static void main(String[] args) {
 		try {
-			PlainFile file = FileManager.construct("Test/../../root data/file.txt").asPlainFile();
+			PlainFile file = FileManager.construct("../../root data/hola.boba").asPlainFile();
 			if (Long.MAX_VALUE >= 16492674416640l)
 				System.out.println("15TB permitidos (" + Long.MAX_VALUE + ")");
 			System.out.println("Root: " + File.separator + " | Separator: " + File.pathSeparator);
@@ -47,9 +46,6 @@ public class Test {
 			file.setCreationTime(-922337203685477580l);
 			file.setLastModifiedTime(0l);
 			file.setLastAccessTime(922337203685477580l);
-			// Funcionalidad con:
-			// Directorios
-			// Links a archivos
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
