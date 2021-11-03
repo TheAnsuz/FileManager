@@ -66,28 +66,12 @@ public abstract class BaseFile {
         String formattedParent = "";
         int index = 0;
         int remove = 0;
-
-        for (int i = 0; i < parent.length(); i++) {
+        for (int i = parent.length() - 1; i >= 0; i--) {
             final char c = parent.charAt(i);
-
-            // Pointer to subdirectory
-            if (c == SEPARATOR)
-                if (parent.charAt(i - 1) == '.' && parent.charAt(i - 2) == '.') {
-                    remove++;
-                    continue;
-                } else if (parent.charAt(i - 1) == '.') {
-                    i++;
-                    continue;
-                } else
-                    index++;
-
-            if (remove > 0)
-                continue;
-            else
-                formattedParent += c;
-
+            
         }
-        return formattedParent;
+        System.out.println();
+        return formattedParent + " - " + index + " - " + remove;
     }
 
     public final static String canonicalize(final String parent, int amount) {

@@ -2,7 +2,6 @@ package me.amrv.testing;
 
 import java.io.File;
 import java.util.Scanner;
-
 import me.amrv.filemanager.BaseFile;
 import me.amrv.filemanager.FileManager;
 import me.amrv.filemanager.PlainFile;
@@ -17,7 +16,7 @@ public class Test {
     public static void main(String[] args) {
         int lasts = 3;
         try {
-            PlainFile file = FileManager.construct("/Games/testing/javatest/.././/T!E@S^TFILES/enlace").asPlainFile();
+            PlainFile file = FileManager.construct("../../root data/.dat").asPlainFile();
             if (Long.MAX_VALUE >= 16492674416640l)
                 System.out.println("15TB permitidos (" + Long.MAX_VALUE + ")");
             System.out.println("Root: " + File.separator + " | Separator: " + File.pathSeparator);
