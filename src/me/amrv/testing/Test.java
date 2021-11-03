@@ -2,6 +2,7 @@ package me.amrv.testing;
 
 import java.io.File;
 import java.util.Scanner;
+
 import me.amrv.filemanager.BaseFile;
 import me.amrv.filemanager.FileManager;
 import me.amrv.filemanager.PlainFile;
@@ -16,7 +17,7 @@ public class Test {
     public static void main(String[] args) {
         int lasts = 3;
         try {
-            PlainFile file = FileManager.construct(".././/TESTFILES/enlace").asPlainFile();
+            PlainFile file = FileManager.construct("/Games/testing/javatest/.././/T!E@S^TFILES/enlace").asPlainFile();
             if (Long.MAX_VALUE >= 16492674416640l)
                 System.out.println("15TB permitidos (" + Long.MAX_VALUE + ")");
             System.out.println("Root: " + File.separator + " | Separator: " + File.pathSeparator);
@@ -27,16 +28,16 @@ public class Test {
             System.out.println("Abstract path: " + file.getAbstractPath());
             long t0 = System.nanoTime();
             System.out.println("Cannonical path: " + file.getCannonicalPath());
-            System.out.println("T: " + ((long) System.nanoTime()- t0));
+            System.out.println("T: " + (System.nanoTime()- t0));
             long t1 = System.nanoTime();
             System.out.println("Cannonicalized: " + BaseFile.canonicalize(file.getAbstractPath()));
-            System.out.println("T: " + ((long) System.nanoTime() - t1));
+            System.out.println("T: " + (System.nanoTime() - t1));
             long t2 = System.nanoTime();
             System.out.println(lasts + " lasts: " + BaseFile.canonicalize(file.getAbstractPath(),lasts));
-            System.out.println("T: " + ((long) System.nanoTime() - t2));
+            System.out.println("T: " + (System.nanoTime() - t2));
             long t3 = System.nanoTime();
             System.out.println("new algorithm: " + BaseFile.canonicalize2(file.getAbstractPath(),-1));
-            System.out.println("T: " + ((long) System.nanoTime() - t3));
+            System.out.println("T: " + (System.nanoTime() - t3));
 //            System.out.println("Parent: " + file.getParent());
 //            System.out.println("Whole Parent: " + file.getWholeParent());
 //            System.out.println("Last Parent: " + file.getLastParent());
