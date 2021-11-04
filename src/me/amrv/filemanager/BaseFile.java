@@ -68,7 +68,22 @@ public abstract class BaseFile {
         int remove = 0;
         for (int i = parent.length() - 1; i >= 0; i--) {
             final char c = parent.charAt(i);
+
+            if (c == '.') {
+                if (parent.charAt(i - 1) == '.' && parent.charAt(i - 2) == SEPARATOR) {
+                    i-=2;
+                    remove++;
+                    continue;
+                } else if (parent.charAt(i - 1) == SEPARATOR) {
+                    i--;
+                    continue;
+                }
+            } else if (c == SEPARATOR) {
+                index++;
+            }
             
+            formattedParent = c + formattedParent;
+
         }
         System.out.println();
         return formattedParent + " - " + index + " - " + remove;
