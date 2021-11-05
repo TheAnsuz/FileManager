@@ -56,19 +56,31 @@ public abstract class BaseFile {
     }
 
     /**
-     * Obtains the cannonical path from a file using a simple method, this is
-     * only to be used it any error occurs obtaining the default cannonical path
+     * Obtains the cannonical path from a file with the given directions,
+     * cannonical paths will format the path operators like <b>../</b> or
+     * <b>./</b>
      *
-     * @param parent the abstract or full path of the file
+     * <p>
+     * Its planned to add the capability of this method to obtain the real path
+     * of link files
+     *
+     *
+     * @param parent - the abstract or full path of the file that will be used
+     * on conversion
+     * @param amount - the amount of subfolders the method will format before
+     * ending, use <b>-1</b> to canonicalize the full path, the amount of
+     * sections to handle starts from the end of the path
+     * @param addFileName - if the cannonical path should include the file name
+     * or start with the first section of the path
      * @return a cannonical like conversion of the path
      */
-    private final static String canonicalize(final String parent, int amount, final boolean addFileName) {
+    private static String canonicalize(final String parent, int amount, final boolean addFileName) {
         String formattedParent = "";
         int index = 0;
         int remove = 0;
         for (int i = parent.length() - 1; i >= 0; i--) {
             final char c = parent.charAt(i);
-            
+
             if (c == SEPARATOR) {
                 if (remove > 0) {
                     remove--;
@@ -79,10 +91,10 @@ public abstract class BaseFile {
                         break;
                 }
             }
-            
+
             if (index <= 0 && !addFileName)
                 continue;
-            
+
             if (c == '.')
                 if (parent.charAt(i - 1) == '.' && parent.charAt(i - 2) == SEPARATOR) {
                     i -= 2;
@@ -94,7 +106,7 @@ public abstract class BaseFile {
                         continue;
                     }
                 }
-            
+
             if (remove <= 0) {
                 formattedParent = parent.charAt(i) + formattedParent;
             }
@@ -213,10 +225,22 @@ public abstract class BaseFile {
         return file.getAbsolutePath();
     }
 
+    /**
+     * Gets a section of the cannonical path of the file from the disk, in
+     * example, a file with the path <b>temp/folder/data/file</b>
+     * and a section of {@code 2} will return <b>folder/data/file</b>
+     *
+     * <p>
+     * If you want to get a section of the path without the file name in it, use
+     * {@code getParentSection()}
+     *
+     * @param section - the amount of sub folders to obtain
+     * @return a section of the cannonical path of the file
+     */
     public final String getPathSection(final int section) {
         return BaseFile.canonicalize(file.getAbsolutePath(), section, true);
     }
-    
+
     // El 'path' desde el disco duro hasta el archivo, igual que el getAbstractPath
     // pero convierte
     // los SEPARADORES de cada OS en el correcto
@@ -275,10 +299,22 @@ public abstract class BaseFile {
      * @return the last section of the path to reach the file
      */
     public final String getLastParent() {
-        
+
         return BaseFile.canonicalize(file.getAbsolutePath(), 1, false);
     }
-    
+
+    /**
+     * Gets a section of the cannonical parent of the file from the disk, in
+     * example, a file with the path <b>temp/folder/data/file</b>
+     * and a section of {@code 2} will return <b>folder/data</b>
+     *
+     * <p>
+     * If you want to get a section of the path including the file name in it, use
+     * {@code getPathSection()}
+     *
+     * @param section - the amount of sub folders to obtain
+     * @return a section of the cannonical parent of the file
+     */
     public final String getParentSection(int section) {
         return BaseFile.canonicalize(file.getAbsolutePath(), section, false);
     }
@@ -714,6 +750,11 @@ public abstract class BaseFile {
         } else {
             throw new UnsupportedOperationException("Cant modify file attributes");
         }
+    }
+    
+    @Override
+    public final String toString() {
+        return "";
     }
 
 }
