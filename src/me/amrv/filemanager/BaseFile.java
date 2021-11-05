@@ -50,7 +50,7 @@ public abstract class BaseFile {
      *
      * @return true if the file has attributes and can be accesed
      */
-    public final boolean canAccessAttributes() {
+    private final boolean canAccessAttributes() {
 
         return setFileAttributes() && attributes != null;
     }
@@ -62,69 +62,45 @@ public abstract class BaseFile {
      * @param parent the abstract or full path of the file
      * @return a cannonical like conversion of the path
      */
-    public final static String canonicalize2(final String parent, int amount) {
+    private final static String canonicalize(final String parent, int amount, final boolean addFileName) {
         String formattedParent = "";
         int index = 0;
         int remove = 0;
         for (int i = parent.length() - 1; i >= 0; i--) {
             final char c = parent.charAt(i);
-
-            if (c == '.') {
+            
+            if (c == SEPARATOR) {
+                if (remove > 0) {
+                    remove--;
+                    continue;
+                } else {
+                    index++;
+                    if (amount >= 0 && index > amount)
+                        break;
+                }
+            }
+            
+            if (index <= 0 && !addFileName)
+                continue;
+            
+            if (c == '.')
                 if (parent.charAt(i - 1) == '.' && parent.charAt(i - 2) == SEPARATOR) {
-                    i-=2;
+                    i -= 2;
                     remove++;
                     continue;
                 } else if (parent.charAt(i - 1) == SEPARATOR) {
-                    i--;
-                    continue;
+                    if (index > 0) {
+                        i--;
+                        continue;
+                    }
                 }
-            } else if (c == SEPARATOR) {
-                index++;
-            }
             
-            formattedParent = c + formattedParent;
-
-        }
-        System.out.println();
-        return formattedParent + " - " + index + " - " + remove;
-    }
-
-    public final static String canonicalize(final String parent, int amount) {
-        String formattedParent = "";
-        int index = 0;
-        int remove = 0;
-        for (int i = parent.length() - 1; i >= 0; i--) {
-            final char c = parent.charAt(i);
-
-            // Checks if the text is a ../ and queues the removal
-            if (c == '.' && parent.charAt(i - 1) == '.' && parent.charAt(i - 2) == SEPARATOR) {
-                i -= 2;
-                remove++;
-                // Checks if the texts is a ./ and ignores it
-            } else if (c == '.' && parent.charAt(i - 1) == SEPARATOR) {
-                i -= 1;
-            } else {
-
-                if (c == SEPARATOR)
-                    index++;
-
-                if (amount > 0 && index >= amount)
-                    break;
-
-                // Checks if the character must be in the path and prints it or leaves it
-                if (remove > 0) {
-                    if (c == SEPARATOR)
-                        remove--;
-                } else {
-                    formattedParent = parent.charAt(i) + formattedParent;
-                }
+            if (remove <= 0) {
+                formattedParent = parent.charAt(i) + formattedParent;
             }
+
         }
         return formattedParent;
-    }
-
-    public final static String canonicalize(final String parent) {
-        return BaseFile.canonicalize(parent, -1);
     }
 
     /**
@@ -237,6 +213,10 @@ public abstract class BaseFile {
         return file.getAbsolutePath();
     }
 
+    public final String getPathSection(final int section) {
+        return BaseFile.canonicalize(file.getAbsolutePath(), section, true);
+    }
+    
     // El 'path' desde el disco duro hasta el archivo, igual que el getAbstractPath
     // pero convierte
     // los SEPARADORES de cada OS en el correcto
@@ -255,12 +235,7 @@ public abstract class BaseFile {
      *
      */
     public final String getCannonicalPath() {
-        try {
-            return file.getCanonicalPath();
-        } catch (IOException x) {
-            System.out.println(x);
-            return canonicalize(file.getAbsolutePath());
-        }
+        return canonicalize(file.getAbsolutePath(), -1, true);
 
     }
 
@@ -288,13 +263,8 @@ public abstract class BaseFile {
      * @return the path from the disk to the file without the name of the file
      */
     public final String getWholeParent() {
-        final String parent = file.getAbsolutePath();
-        String formattedParent = BaseFile.canonicalize(parent);
 
-        boolean filename = true;
-        int remove = 0;
-
-        return formattedParent;
+        return BaseFile.canonicalize(file.getAbsolutePath(), -1, false);
     }
 
     /**
@@ -305,45 +275,12 @@ public abstract class BaseFile {
      * @return the last section of the path to reach the file
      */
     public final String getLastParent() {
-        final String parent = file.getAbsolutePath();
-        String formattedParent = "";
-
-        boolean filename = true;
-        int remove = 0;
-        for (int i = parent.length() - 1; i >= 0; i--) {
-
-            final char c = parent.charAt(i);
-
-            if (filename) {
-                if (c == SEPARATOR) {
-                    filename = false;
-                    continue;
-                } else {
-                    continue;
-                }
-            }
-
-            if (c == '.' && parent.charAt(i - 1) == '.' && parent.charAt(i - 2) == SEPARATOR) {
-                i -= 2;
-                remove++;
-            } else {
-
-                if (remove <= 0) {
-
-                    if (c == SEPARATOR) {
-                        break;
-                    } else {
-                        formattedParent = parent.charAt(i) + formattedParent;
-                    }
-                } else if (c == SEPARATOR) {
-                    remove--;
-                } else {
-                    //continue;
-                }
-
-            }
-        }
-        return formattedParent;
+        
+        return BaseFile.canonicalize(file.getAbsolutePath(), 1, false);
+    }
+    
+    public final String getParentSection(int section) {
+        return BaseFile.canonicalize(file.getAbsolutePath(), section, false);
     }
 
     // el maximo de espacio en el disco o particion de disco del archivo,
