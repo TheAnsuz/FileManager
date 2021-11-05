@@ -8,8 +8,10 @@ import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributeView;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 public abstract class BaseFile {
 
@@ -28,6 +30,21 @@ public abstract class BaseFile {
     private final String extension;
     private final BasicFileAttributeView attribute;
     private BasicFileAttributes attributes;
+    private static List<BaseFile> queueForDelete = new ArrayList<BaseFile>();
+    private static boolean queue = false;
+
+    private static void createRemoveQueue() {
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+
+            if (!queueForDelete.isEmpty()) {
+                for (BaseFile base : queueForDelete)
+                    base.deleteOnExit();
+            }
+            System.out.println("Programa finalizado");
+
+        }));
+        queue = true;
+    }
 
     /**
      * Creates a easy to manage formatted file using the given file
@@ -309,8 +326,8 @@ public abstract class BaseFile {
      * and a section of {@code 2} will return <b>folder/data</b>
      *
      * <p>
-     * If you want to get a section of the path including the file name in it, use
-     * {@code getPathSection()}
+     * If you want to get a section of the path including the file name in it,
+     * use {@code getPathSection()}
      *
      * @param section - the amount of sub folders to obtain
      * @return a section of the cannonical parent of the file
@@ -566,11 +583,15 @@ public abstract class BaseFile {
 
     // Eliminacion del archivo
     /**
-     * Deletes the file or directory
+     * Deletes the file or directory (directories must be empty for the
+     * operation to be acomplished).
      * <p>
-     * If the file points to a directory it will only be removed if its empty
+     * If you wish to remove a directory even if its not empty, use
+     * {@code forceDelete()}.
      * <p>
-     * An IOException could be thrown for debugging purposes
+     * An IOException could be thrown if a severe problem happens, useful for
+     * debugging purposes, however if the operation cant just be acoplished, it
+     * will just return {@code false}.
      *
      * @return true if the operation was successfully completed false otherwise
      */
@@ -579,11 +600,12 @@ public abstract class BaseFile {
     }
 
     /**
-     * This method <b>is not yet implemented</b> and will always throw a
-     * UnsupportedOperationException
-     *
      * Forces the deletion of the requested file or folder, folders will be
-     * removed even if they are not empty so be careful using this
+     * removed even if they are not empty and the operation cant be undone.
+     *
+     * <p>
+     * If you want the operation to not remove directories which are not empty,
+     * you can use {@code delete()}.
      *
      * @return true is the operation was successfully completed
      */
@@ -605,21 +627,25 @@ public abstract class BaseFile {
     /**
      * Deletes the file or directory when the virtual machine aka program ends
      * normally, once the deletion is requested and put to queue there is no way
-     * to cancel it, anyway this works with the same conditions as
-     * {@code delete()}
+     * to cancel it, except from that this work like {@code delete()}.
      * <p>
      * If multiple files are queued to deletion, they will attempt to be removed
-     * on the inverse order they were queued
+     * on the inverse order they were queued.
      */
     public final void deleteOnExit() {
         file.deleteOnExit();
     }
 
+    public final void queueForDelete() {
+        if (queue = false)
+            createRemoveQueue();
+    }
+    
     // atributos del archivo
     /**
      * Obtains the date in which the file was last modified in miliseconds since
      * the epoch or 0L if any errror occurs, negative values indicate time
-     * before the epoch
+     * before the epoch.
      *
      *
      * @return the date in miliseconds since the file was last modified or 0L if
@@ -630,7 +656,7 @@ public abstract class BaseFile {
     }
 
     /**
-     * Obtains the date in which the file was last modified using a Date format
+     * Obtains the date in which the file was last modified using a Date format.
      *
      * @return the date in which the file was last modified
      * @see java.util.Date
@@ -640,7 +666,7 @@ public abstract class BaseFile {
     }
 
     /**
-     * Sets the time in miliseconds since the file was last modified
+     * Sets the time in miliseconds since the file was last modified.
      *
      * @param miliseconds - the time to be set as last modified time
      */
@@ -651,9 +677,9 @@ public abstract class BaseFile {
     /**
      * Obtains the date in which the file was created in miliseconds since the
      * epoch or 0L if any errror occurs, negative values indicate time before
-     * the epoch
+     * the epoch.
      * <p>
-     * Some systems may not save this value on files
+     * Some systems may not save this value on files.
      *
      * @return the date in miliseconds since the file was created or 0L if any
      * error occurs
@@ -669,9 +695,9 @@ public abstract class BaseFile {
     }
 
     /**
-     * Obtains the date in which the file was created using a Date format
+     * Obtains the date in which the file was created using a Date format.
      * <p>
-     * Some systems may not save this value on files
+     * Some systems may not save this value on files.
      *
      * @return the date in which the file was created
      * @see java.util.Date
@@ -681,9 +707,9 @@ public abstract class BaseFile {
     }
 
     /**
-     * Sets the time in miliseconds since the file was created
+     * Sets the time in miliseconds since the file was created.
      * <p>
-     * Some systems may not save this value on files
+     * Some systems may not save this value on files.
      *
      * @param miliseconds - the time to be set as last modified time
      * @throws UnsupportedOperationException if the file attributes couldnt be
@@ -703,9 +729,9 @@ public abstract class BaseFile {
     /**
      * Obtains the date in which the file was last accessed in miliseconds since
      * the epoch or 0L if any errror occurs, negative values indicate time
-     * before the epoch
+     * before the epoch.
      * <p>
-     * Some systems may not save this value on files
+     * Some systems may not save this value on files.
      *
      * @return the date in miliseconds since the file was last accessed or 0L if
      * any error occurs
@@ -721,9 +747,9 @@ public abstract class BaseFile {
     }
 
     /**
-     * Obtains the date in which the file was last accessed using a Date format
+     * Obtains the date in which the file was last accessed using a Date format.
      * <p>
-     * Some systems may not save this value on files
+     * Some systems may not save this value on files.
      *
      * @return the date in which the file last accessed
      * @see java.util.Date
@@ -733,9 +759,9 @@ public abstract class BaseFile {
     }
 
     /**
-     * Sets the time in miliseconds since the file was last accessed
+     * Sets the time in miliseconds since the file was last accessed.
      * <p>
-     * Some systems may not save this value on files
+     * Some systems may not save this value on files.
      *
      * @param miliseconds - the time to be set as last accessed time
      * @throws UnsupportedOperationException if the file attributes couldnt be
@@ -751,10 +777,15 @@ public abstract class BaseFile {
             throw new UnsupportedOperationException("Cant modify file attributes");
         }
     }
-    
+
+    /**
+     * Returns the file path that was used to create the file.
+     *
+     * @return the path used to create the file
+     */
     @Override
     public final String toString() {
-        return "";
+        return file.getPath();
     }
 
 }

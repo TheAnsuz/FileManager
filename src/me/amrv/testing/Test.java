@@ -33,7 +33,6 @@ public class Test {
             long t2 = System.nanoTime();
             System.out.println(lasts + " lasts: " + file.getAbstractPath());
             System.out.println("T: " + (System.nanoTime() - t2));
-
 //            System.out.println("Parent: " + file.getParent());
 //            System.out.println("Whole Parent: " + file.getWholeParent());
 //            System.out.println("Last Parent: " + file.getLastParent());
