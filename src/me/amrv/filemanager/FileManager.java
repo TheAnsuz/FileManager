@@ -3,6 +3,7 @@ package me.amrv.filemanager;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.InvalidPathException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public final class FileManager {
@@ -61,7 +62,7 @@ public final class FileManager {
 			}
 		}
 
-		Logger.getGlobal().warning("You should avoid using characters such as " + discouraged);
+		Logger.getGlobal().log(Level.WARNING, "You should avoid using characters such as {0}", discouraged);
 		return true;
 	}
 

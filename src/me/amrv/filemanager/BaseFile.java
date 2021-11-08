@@ -13,7 +13,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-public abstract class BaseFile {
+abstract class BaseFile {
 
     /*
         Absolute path - empieza desde la raiz del sistema o unidad de disco ( \ o C:\)
@@ -26,25 +26,13 @@ public abstract class BaseFile {
      * The system-dependant separator used on the paths
      */
     private static final char SEPARATOR = File.separatorChar;
-    private final File file;
-    private final String extension;
+
+    protected final File file;
+    protected final String extension;
     private final BasicFileAttributeView attribute;
     private BasicFileAttributes attributes;
-    private static List<BaseFile> queueForDelete = new ArrayList<BaseFile>();
+    private static final List<BaseFile> queueForDelete = new ArrayList<BaseFile>();
     private static boolean queue = false;
-
-    private static void createRemoveQueue() {
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-
-            if (!queueForDelete.isEmpty()) {
-                for (BaseFile base : queueForDelete)
-                    base.deleteOnExit();
-            }
-            System.out.println("Programa finalizado");
-
-        }));
-        queue = true;
-    }
 
     /**
      * Creates a easy to manage formatted file using the given file
@@ -59,6 +47,24 @@ public abstract class BaseFile {
             extension = "";
         }
         attribute = Files.getFileAttributeView(file.toPath(), BasicFileAttributeView.class);
+        reload();
+    }
+
+    /**
+     * Creates the remove queue for a better deleting system that allows to put
+     * in queue removal operations and cancell them before they are removed
+     */
+    private static void checkRemoveQueue() {
+        if (queue)
+            return;
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            if (!queueForDelete.isEmpty()) {
+                queueForDelete.forEach((base) -> {
+                    base.deleteOnExit();
+                });
+            }
+        }));
+        queue = true;
     }
 
     /**
@@ -67,8 +73,7 @@ public abstract class BaseFile {
      *
      * @return true if the file has attributes and can be accesed
      */
-    private final boolean canAccessAttributes() {
-
+    private boolean canAccessAttributes() {
         return setFileAttributes() && attributes != null;
     }
 
@@ -110,6 +115,8 @@ public abstract class BaseFile {
             }
 
             if (index <= 0 && !addFileName)
+                continue;
+            else if (index == 1 && !addFileName && c == SEPARATOR)
                 continue;
 
             if (c == '.')
@@ -277,7 +284,6 @@ public abstract class BaseFile {
      */
     public final String getCannonicalPath() {
         return canonicalize(file.getAbsolutePath(), -1, true);
-
     }
 
     // raiz en la que esta situado el archivo
@@ -304,7 +310,6 @@ public abstract class BaseFile {
      * @return the path from the disk to the file without the name of the file
      */
     public final String getWholeParent() {
-
         return BaseFile.canonicalize(file.getAbsolutePath(), -1, false);
     }
 
@@ -316,7 +321,6 @@ public abstract class BaseFile {
      * @return the last section of the path to reach the file
      */
     public final String getLastParent() {
-
         return BaseFile.canonicalize(file.getAbsolutePath(), 1, false);
     }
 
@@ -346,11 +350,8 @@ public abstract class BaseFile {
      * Values over <b>8388608 Terabytes</b> might cause errors and if the size
      * is greater than {@code Long.MAX_VALUE} then that value will be returned
      *
-     * @deprecated Obtaining the disk's free space is a pretty useless method
-     * for a file
-     * @return
+     * @return the amount of free space, in bytes
      */
-    @Deprecated
     public final long getFreeSpace() {
         return file.getFreeSpace();
     }
@@ -363,11 +364,8 @@ public abstract class BaseFile {
      * Values over <b>8388608 Terabytes</b> might cause errors and if the size
      * is greater than {@code Long.MAX_VALUE} then that value will be returned
      *
-     * @deprecated Obtaining the disk space is a pretty useless method for a
-     * file
-     * @return
+     * @return the total space on the disk, in bytes
      */
-    @Deprecated
     public final long getTotalSpace() {
         return file.getTotalSpace();
     }
@@ -390,11 +388,8 @@ public abstract class BaseFile {
      * Values over <b>8388608 Terabytes</b> might cause errors and if the size
      * is greater than {@code Long.MAX_VALUE} then that value will be returned
      *
-     * @deprecated Obtaining the disk's usable space is a pretty useless method
-     * for a file
-     * @return
+     * @return the aviable space the virtual machine can access in bytes
      */
-    @Deprecated
     public final long getUsableSpace() {
         return file.getUsableSpace();
     }
@@ -636,11 +631,35 @@ public abstract class BaseFile {
         file.deleteOnExit();
     }
 
-    public final void queueForDelete() {
-        if (queue = false)
-            createRemoveQueue();
+    /**
+     * Puts or removes this file on a queue for removal, works exactly like
+     * {@code deleteOnExit()} except this allows to cancel the operation before
+     * the file gets removed
+     *
+     * @param delete - if the file should be queued or not
+     */
+    public final void queueForDelete(boolean delete) {
+        checkRemoveQueue();
+
+        if (delete) {
+            if (queueForDelete.isEmpty() || !queueForDelete.contains(this))
+                queueForDelete.add(this);
+        } else if (!queueForDelete.isEmpty() && queueForDelete.contains(this))
+            queueForDelete.remove(this);
+
     }
-    
+
+    /**
+     * Checks if the file is queued for removal
+     *
+     * @return true if the file is queued, false otherwise
+     */
+    public final boolean isQueuedForDelete() {
+        checkRemoveQueue();
+
+        return queueForDelete.contains(this) && !queueForDelete.isEmpty();
+    }
+
     // atributos del archivo
     /**
      * Obtains the date in which the file was last modified in miliseconds since
@@ -787,5 +806,66 @@ public abstract class BaseFile {
     public final String toString() {
         return file.getPath();
     }
+
+    //  ################################################################
+    //  ##            Funcionalidad de lectura y escritura            ##
+    //  ################################################################
+    /**
+     * Reloads the current information from the file, obtainin it again from the
+     * file itself and formatting it, this will override every contents that the
+     * virtual machine is holding.
+     *
+     * <p>
+     * Runtime exceptions may be thrown if a severe problem happens.
+     *
+     * @return true if the reload was succesful, false otherwise
+     */
+    public final boolean reload() {
+        if (!file.canRead())
+            return false;
+
+        try {
+            return readProcess();
+        } catch (IOException e) {
+
+            throw new RuntimeException(e);
+
+        }
+    }
+
+    /**
+     * Writes the current holding information to the file, replacing all its
+     * contents but keeping all the data that the virtual machine holds,
+     * allowing for more operations after saving.
+     *
+     * <p>
+     * Having multiple applications with the same file opened may cause problems
+     * depending on how do they use streams to save files, also runtime
+     * exceptions may be thrown for debugging purposes.
+     *
+     * @param alternative - if the save operation should use a modern method,
+     * sometimes faster on newer computers
+     * @return true if the operation was succesful, false otherwise
+     */
+    public final boolean save(boolean alternative) {
+        if (!file.canWrite())
+            return false;
+
+        try {
+            if (alternative)
+                return writeProcessNormal();
+            else
+                return writeProcessAlternative();
+        } catch (IOException e) {
+
+            throw new RuntimeException(e);
+        }
+    }
+
+    abstract protected boolean readProcess() throws IOException;
+
+    abstract protected boolean writeProcessNormal() throws IOException;
+
+    abstract protected boolean writeProcessAlternative() throws IOException;
 
 }
