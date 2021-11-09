@@ -11,7 +11,9 @@ package me.amrv.testing;
 public class Paths {
     
     public static void main(String[] args) {
+        // %disk%:\Users\%username% (Windows, not sure if it works for Linux or mac)
         System.out.println(System.getProperty("user.home"));
+        
     }
     
 }
