@@ -12,12 +12,11 @@ public final class FileManager {
 //        return 0;
 //
 //    }
-
+	
 	private static boolean checkname(final String name) {
 		if (name == null)
 			throw new InvalidPathException("NULL", "The filepath/file cannot be null");
 		String discouraged = "";
-		
 		for (int i = 0; i < name.length(); i++) {
 
 			final char c = name.charAt(i);
