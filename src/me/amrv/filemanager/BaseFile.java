@@ -510,6 +510,17 @@ abstract class BaseFile {
 		return file.exists();
 	}
 
+//	public final boolean rename(String name) {
+//		this.file = file;
+//		if (file.getName().contains(".")) {
+//			extension = file.getName().substring(file.getName().lastIndexOf('.') + 1);
+//		} else {
+//			extension = "";
+//		}
+//		attribute = Files.getFileAttributeView(file.toPath(), BasicFileAttributeView.class);
+//		reload();
+//	}
+	
 	/**
 	 * Checks if the pathname of the file is absolute, meaning that will return true
 	 * if at the time the file was defined it was used a path that started on the

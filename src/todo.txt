@@ -3,4 +3,5 @@ Hacer un metodo RESOLVE en el FileManager que detecta el archivo si es un link o
 hacer un metodo RESOLVEorCONSTRUCT que si el RESOLVE no funciona hace un CONSTRUCT del archivo
 --Hacer una manera mas eficiente de obtener los 'path' de los archivos -> (cannonical > resolve > abstract)
 --Hacer un metodo forceDelete
-Hacer una manera de poner PATHs por defecto 
+Hacer una manera de poner PATHs por defecto
+Metodo para renombrar archivos
