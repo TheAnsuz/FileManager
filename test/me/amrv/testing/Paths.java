@@ -8,11 +8,10 @@ package me.amrv.testing;
  *
  * @author marruiad
  */
-public class Canocalize {
+public class Paths {
     
     public static void main(String[] args) {
-        
-       
-        
+        System.out.println(System.getProperty("user.home"));
     }
+    
 }

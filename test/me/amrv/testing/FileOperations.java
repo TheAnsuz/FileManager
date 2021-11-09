@@ -6,7 +6,7 @@ import me.amrv.filemanager.FileManager;
 import me.amrv.filemanager.PlainFile;
 import me.amrv.filemanager.SafeFileOperation;
 
-public class Test {
+public class FileOperations {
 
     private static final Scanner scan = new Scanner(System.in);
 
@@ -14,8 +14,9 @@ public class Test {
     @SafeFileOperation
     public static void main(String[] args) {
         int lasts = 3;
+//        System.out.println(">>>"+System.getProperty("user.dir"));
         try {
-            PlainFile file = FileManager.construct("../../././root data/../root data/../root data/.dat").asPlainFile();
+            PlainFile file = FileManager.construct("/Usuarios/%user%/Hola.e").asPlainFile();
             if (Long.MAX_VALUE >= 16492674416640l)
                 System.out.println("15TB permitidos (" + Long.MAX_VALUE + ")");
             System.out.println("Root: " + File.separator + " | Separator: " + File.pathSeparator);
@@ -24,22 +25,19 @@ public class Test {
             System.out.println("Extension: " + file.getExtension());
             System.out.println("Path: " + file.getPath());
             System.out.println("Abstract path: " + file.getAbstractPath());
-//            long t0 = System.nanoTime();
-//            System.out.println("Cannonical path: " + file.getCannonicalPath());
-//            System.out.println("T: " + (System.nanoTime()- t0));
             long t1 = System.nanoTime();
             System.out.println("Cannonicalized: " + file.getCannonicalPath());
             System.out.println("T: " + (System.nanoTime() - t1));
             long t2 = System.nanoTime();
             System.out.println(lasts + " lasts: " + file.getPathSection(lasts));
             System.out.println("T: " + (System.nanoTime() - t2));
-         
             System.out.println("Parent: " + file.getParent());
             System.out.println("Whole Parent: " + file.getWholeParent());
             System.out.println("Last Parent: " + file.getLastParent());
             System.out.println("Free space: " + file.getFreeSpace());
             System.out.println("Usable space: " + file.getUsableSpace());
             System.out.println("Total space: " + file.getTotalSpace());
+            System.out.println("Used space: " + file.size());
             System.out.println("Exists: " + file.exists());
             System.out.println("Can execute: " + file.canExecute());
             System.out.println("Can write: " + file.canWrite());
@@ -56,15 +54,6 @@ public class Test {
             file.setCreationTime(-922337203685477580l);
             file.setLastModifiedTime(0l);
             file.setLastAccessTime(922337203685477580l);
-
-            System.out.println();
-            System.out.println();
-            System.out.println();
-            System.out.println(file.getData().toString());
-            
-            //PlainFile del = FileManager.construct("../hola").asPlainFile();
-            //System.out.println("Directorio " + del.isDirectory());
-            //del.forceDelete();
         } catch (Exception e) {
             e.printStackTrace();
         }

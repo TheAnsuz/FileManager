@@ -1,6 +1,5 @@
 package me.amrv.filemanager;
 
-import com.sun.istack.internal.NotNull;
 import java.io.File;
 import me.amrv.filemanager.exception.InvalidFileFormat;
 
@@ -21,14 +20,14 @@ public final class FileParser {
         return true;
     }
 
-    protected boolean checkFormat(@NotNull String string) {
+    protected boolean checkFormat(String string) {
         if (string.isEmpty())
             return true;
         else
             return extension.equalsIgnoreCase(string);
     }
 
-    protected boolean checkFormat(@NotNull String... strings) {
+    protected boolean checkFormat(String... strings) {
 
         for (String ext : strings) {
             if (extension.equalsIgnoreCase(ext)) {

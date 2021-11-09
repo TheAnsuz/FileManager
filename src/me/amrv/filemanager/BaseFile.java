@@ -816,7 +816,8 @@ abstract class BaseFile {
      * virtual machine is holding.
      *
      * <p>
-     * Runtime exceptions may be thrown if a severe problem happens.
+     * Runtime exceptions may be thrown if a severe problem happens, however if
+     * the operation just fails it will just return a false value
      *
      * @return true if the reload was succesful, false otherwise
      */
@@ -843,8 +844,35 @@ abstract class BaseFile {
      * depending on how do they use streams to save files, also runtime
      * exceptions may be thrown for debugging purposes.
      *
+     * @return true if the operation was succesful, false otherwise
+     */
+    public final boolean save() {
+        return save(true);
+    }
+
+    /**
+     * This will return the size in bytes of the file, not denoted by itself but
+     * by the abstract pathname, some files may return 0L if there was a problem
+     * obtaining the size or if it cannot be obtained.
+     *
+     * @return the size in bytes or 0L if it cant be obtained
+     */
+    public final long size() {
+        return file.length();
+    }
+
+    /**
+     * Writes the current holding information to the file, replacing all its
+     * contents but keeping all the data that the virtual machine holds,
+     * allowing for more operations after saving.
+     *
+     * <p>
+     * Having multiple applications with the same file opened may cause problems
+     * depending on how do they use streams to save files, also runtime
+     * exceptions may be thrown for debugging purposes.
+     *
      * @param alternative - if the save operation should use a modern method,
-     * sometimes faster on newer computers
+     * sometimes faster on newer computers due to the use of buffers
      * @return true if the operation was succesful, false otherwise
      */
     public final boolean save(boolean alternative) {
@@ -862,10 +890,38 @@ abstract class BaseFile {
         }
     }
 
+    /**
+     * Removes all the data stored on the virtual machine so a save operation
+     * would remove all the contents from the file.
+     */
+    abstract protected void clear();
+
+    /**
+     * Protected method to read the file information, this method gets executed
+     * once all the checks of aviability are done
+     *
+     * @return true if the read was completed, false otherwise
+     * @throws IOException if any error occurs while reading the file
+     */
     abstract protected boolean readProcess() throws IOException;
 
+    /**
+     * Protected method to save the file information, this method gets executed
+     * once all the checks of aviability are done
+     * 
+     * <p>
+     * This method uses the legacy functi
+     * 
+     * @return true if the write was completed, false otherwise
+     * @throws IOException if any error occurs while writing the file
+     */
     abstract protected boolean writeProcessNormal() throws IOException;
 
+    /**
+     * 
+     * @return
+     * @throws IOException 
+     */
     abstract protected boolean writeProcessAlternative() throws IOException;
 
 }

@@ -1,5 +1,6 @@
 A�adir @SafeFileOperation anotacion para cambiar los methodos que devuelven un error a metodos que devuelven un valor por defecto
 Hacer un metodo RESOLVE en el FileManager que detecta el archivo si es un link o carpeta
 hacer un metodo RESOLVEorCONSTRUCT que si el RESOLVE no funciona hace un CONSTRUCT del archivo
-Hacer una manera mas eficiente de obtener los 'path' de los archivos -> (cannonical > resolve > abstract)
-Hacer un metodo forceDelete 
+--Hacer una manera mas eficiente de obtener los 'path' de los archivos -> (cannonical > resolve > abstract)
+--Hacer un metodo forceDelete
+Hacer una manera de poner PATHs por defecto 
