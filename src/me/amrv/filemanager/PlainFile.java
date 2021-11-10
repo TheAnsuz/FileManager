@@ -25,8 +25,11 @@ public final class PlainFile extends BaseFile {
                 content = content.append((char) reader.read());
             }
             reader.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
         }
-        return true;
     }
 
     @Override
@@ -42,7 +45,7 @@ public final class PlainFile extends BaseFile {
     }
 
     @Override
-    protected boolean writeProcessAlternative() throws IOException {
+    protected boolean writeProcessAdvanced() throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write(content.toString());
             writer.close();
