@@ -25,12 +25,8 @@ public class FileOperations {
             System.out.println("Extension: " + file.getExtension());
             System.out.println("Path: " + file.getPath());
             System.out.println("Abstract path: " + file.getAbstractPath());
-            long t1 = System.nanoTime();
             System.out.println("Cannonicalized: " + file.getCannonicalPath());
-            System.out.println("T: " + (System.nanoTime() - t1));
-            long t2 = System.nanoTime();
             System.out.println(lasts + " lasts: " + file.getPathSection(lasts));
-            System.out.println("T: " + (System.nanoTime() - t2));
             System.out.println("Parent: " + file.getParent());
             System.out.println("Whole Parent: " + file.getWholeParent());
             System.out.println("Last Parent: " + file.getLastParent());
@@ -55,7 +51,15 @@ public class FileOperations {
             file.setLastModifiedTime(0l);
             file.setLastAccessTime(922337203685477580l);
             file.queueForDelete(true);
-//            file.rename("newname.newfile");
+            file.rename("newname.newfile");
+            System.out.println("Nombre completo: " + file.getFullName());
+            System.out.println("Nombre corto: " + file.getShortName());
+            System.out.println("Extension: " + file.getExtension());
+            System.out.println("Path: " + file.getPath());
+            System.out.println("Abstract path: " + file.getAbstractPath());
+            System.out.println("Cannonicalized: " + file.getCannonicalPath());
+            System.out.println(lasts + " lasts: " + file.getPathSection(lasts));
+            System.out.println("Parent: " + file.getParent());
         } catch (Exception e) {
             e.printStackTrace();
         }

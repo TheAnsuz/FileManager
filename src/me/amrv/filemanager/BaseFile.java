@@ -107,11 +107,10 @@ abstract class BaseFile {
 				if (remove > 0) {
 					remove--;
 					continue;
-				} else {
-					index++;
-					if (amount >= 0 && index > amount)
-						break;
 				}
+				index++;
+				if (amount >= 0 && index > amount)
+					break;
 			}
 
 			if (index <= 0 && !addFileName)
@@ -510,7 +509,9 @@ abstract class BaseFile {
 		return file.exists();
 	}
 
-//	public final boolean rename(String name) {
+	public final boolean rename(String name) {
+		final File renamed = new File(file.getPath().replace(file.getName(), name));
+		return file.renameTo(renamed);
 //		this.file = file;
 //		if (file.getName().contains(".")) {
 //			extension = file.getName().substring(file.getName().lastIndexOf('.') + 1);
@@ -519,7 +520,7 @@ abstract class BaseFile {
 //		}
 //		attribute = Files.getFileAttributeView(file.toPath(), BasicFileAttributeView.class);
 //		reload();
-//	}
+	}
 	
 	/**
 	 * Checks if the pathname of the file is absolute, meaning that will return true
