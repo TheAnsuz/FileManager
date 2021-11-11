@@ -16,7 +16,7 @@ public class FileOperations {
         int lasts = 3;
 //        System.out.println(">>>"+System.getProperty("user.dir"));
         try {
-            PlainFile file = FileManager.construct("C:\\Users\\Adrian\\Saved Games\\Testing\\name.file").asPlainFile();
+            PlainFile file = FileManager.construct("test\\me\\amrv\\testing\\files\\name.file").asPlainFile();
             if (Long.MAX_VALUE >= 16492674416640l)
                 System.out.println("15TB permitidos (" + Long.MAX_VALUE + ")");
             System.out.println("Root: " + File.separator + " | Separator: " + File.pathSeparator);
@@ -25,12 +25,8 @@ public class FileOperations {
             System.out.println("Extension: " + file.getExtension());
             System.out.println("Path: " + file.getPath());
             System.out.println("Abstract path: " + file.getAbstractPath());
-            long t1 = System.nanoTime();
             System.out.println("Cannonicalized: " + file.getCannonicalPath());
-            System.out.println("T: " + (System.nanoTime() - t1));
-            long t2 = System.nanoTime();
             System.out.println(lasts + " lasts: " + file.getPathSection(lasts));
-            System.out.println("T: " + (System.nanoTime() - t2));
             System.out.println("Parent: " + file.getParent());
             System.out.println("Whole Parent: " + file.getWholeParent());
             System.out.println("Last Parent: " + file.getLastParent());
@@ -54,7 +50,7 @@ public class FileOperations {
             file.setCreationTime(-922337203685477580l);
             file.setLastModifiedTime(0l);
             file.setLastAccessTime(922337203685477580l);
-            file.queueForDelete(true);
+//            file.queueForDelete(true);
 //            file.rename("newname.newfile");
         } catch (Exception e) {
             e.printStackTrace();

@@ -44,10 +44,26 @@ public final class FileParser {
      * if it was all in a String, also saving it as a string to the file.
      *
      * @return a new PlainFile object
+     * @see java.lang.String
      */
     public PlainFile asPlainFile() {
         if (checkFormat()) {
             return new PlainFile(file);
+        } else {
+            throw new InvalidFileFormat("Plain file does not support ." + extension + " file formats");
+        }
+    }
+
+    /**
+     * Creates an instance of a List file, allowing any type of file to be
+     * interpreted and formated as a List
+     *
+     * @return a new ListFile object
+     * @see java.util.List
+     */
+    public ListFile asListFile() {
+        if (checkFormat()) {
+            return new ListFile(file);
         } else {
             throw new InvalidFileFormat("Plain file does not support ." + extension + " file formats");
         }

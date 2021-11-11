@@ -12,6 +12,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -75,6 +76,89 @@ public class ListFile extends BaseFile {
             return false;
         }
 
+    }
+
+    /**
+     * Replaces the contents of the file with the given list
+     *
+     * @param list - the list that will override the contents of the file
+     */
+    public void set(List<String> list) {
+        content = (list == null) ? new ArrayList<String>() : list;
+    }
+
+    /**
+     * Replaces the contents of the file with the given array
+     *
+     * @param array - the array that will override the contents of the file
+     * @return true if the operation was succesful, false otherwise
+     */
+    public boolean set(String[] array) {
+        content.clear();
+        return content.addAll((array == null) ? Arrays.asList(new String[0]) : Arrays.asList(array));
+    }
+
+    /**
+     * Replaces the line in the given location
+     *
+     * @param index - the position where the string will be replaced
+     * @param str - the string that will replace the content of the file
+     */
+    public void replace(int index, String str) {
+        if (index < 0 || index >= content.size())
+            throw new IndexOutOfBoundsException("Cannot replace a string positioned outside the minimun or maximun size of the list");
+        content.set(index, (str == null) ? "" : str);
+    }
+
+    /**
+     * Adds the given string at the end of the list
+     *
+     * @param str
+     */
+    public void add(String str) {
+        content.add((str == null) ? "" : str);
+    }
+
+    public void add(String str, int index) {
+        content.add(index, (str == null) ? "" : str);
+    }
+
+    public String get(int index) {
+        return content.get(index);
+    }
+
+    public List<String> get() {
+        return content;
+    }
+
+    public String[] toArray() {
+        return (String[]) content.toArray();
+    }
+
+    public boolean contains(String str) {
+        if (str == null)
+            return false;
+        return content.contains(str);
+    }
+
+    public int indexOf(String str) {
+        if (str == null)
+            return -1;
+        return content.indexOf(str);
+    }
+
+    public int lastIndexOf(String str) {
+        if (str == null)
+            return -1;
+        return content.lastIndexOf(str);
+    }
+
+    public int length() {
+        return content.size();
+    }
+
+    public boolean isEmpty() {
+        return content.isEmpty();
     }
 
 }
