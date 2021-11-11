@@ -5,3 +5,10 @@ hacer un metodo RESOLVEorCONSTRUCT que si el RESOLVE no funciona hace un CONSTRU
 --Hacer un metodo forceDelete
 Hacer una manera de poner PATHs por defecto
 Metodo para renombrar archivos
+Comprobar cual es el mejor metodo para escribir en archivos:
+    # FileWriter
+    # FileOutputStream
+    # OutputStreamWriter
+    # BufferedWriter
+    # PrintWriter
+Comprobar cual es mejor metodo para leer archivos

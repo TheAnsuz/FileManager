@@ -19,9 +19,9 @@ public class Paths {
 	
 	
     public static void main(String[] args) {
-       
+        
         System.out.println("ALL_USER_DATA_PATH "+FilePath.ALL_USER_DATA_PATH);
-		System.out.println("COMMON_FILES_64 " + FilePath.COMMON_FILES_64_PATH);
+        System.out.println("COMMON_FILES_64 " + FilePath.COMMON_FILES_64_PATH);
         System.out.println("COMMON_FILES_86 "+FilePath.COMMON_FILES_86_PATH);
         System.out.println("DRIVERDATA_PATH "+FilePath.DRIVERDATA_PATH);
         System.out.println("LOCAL_PATH "+FilePath.LOCAL_PATH);

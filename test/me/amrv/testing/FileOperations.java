@@ -16,7 +16,7 @@ public class FileOperations {
         int lasts = 3;
 //        System.out.println(">>>"+System.getProperty("user.dir"));
         try {
-            PlainFile file = FileManager.construct("C:\\Users\\Adrian\\Saved Games\\Testing\\name.file").asPlainFile();
+            PlainFile file = FileManager.construct("test\\me\\amrv\\testing\\files\\name.file").asPlainFile();
             if (Long.MAX_VALUE >= 16492674416640l)
                 System.out.println("15TB permitidos (" + Long.MAX_VALUE + ")");
             System.out.println("Root: " + File.separator + " | Separator: " + File.pathSeparator);
@@ -60,6 +60,9 @@ public class FileOperations {
             System.out.println("Cannonicalized: " + file.getCannonicalPath());
             System.out.println(lasts + " lasts: " + file.getPathSection(lasts));
             System.out.println("Parent: " + file.getParent());
+//            file.queueForDelete(true);
+//            file.rename("newname.newfile");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
