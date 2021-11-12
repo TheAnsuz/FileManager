@@ -12,14 +12,21 @@ import me.amrv.filemanager.ListFile;
  * @author marruiad
  */
 public class TestList {
-    
-    public static void main(String[] args) {
-        
-        ListFile file = FileManager.construct("test\\me\\amrv\\testing\\files\\file.list").asListFile();
-        file.add("add");
-        file.add(null);
-        
-        file.add("add-index", 0);
-        file.save();
-    }
+
+	public static void main(String[] args) {
+		try {
+			ListFile file = FileManager.construct("test\\me\\amrv\\testing\\files\\file.list").asListFile();
+			file.clear();
+			file.add("add0");
+			file.add(null);
+			file.add("add2");
+			file.add("add-index-0", 0);
+			file.save(true);
+			
+			for (String str : file.toArray())
+				System.out.println(str);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

@@ -914,7 +914,7 @@ abstract class BaseFile {
      * Removes all the data stored on the virtual machine so a save operation
      * would remove all the contents from the file.
      */
-    abstract protected void clear();
+    abstract public void clear();
 
     /**
      * Protected method to read the file information, this method gets executed
