@@ -6,6 +6,7 @@ package me.amrv.testing;
 
 import me.amrv.filemanager.FileManager;
 import me.amrv.filemanager.ListFile;
+import me.amrv.filemanager.SaveMode;
 
 /**
  *
@@ -17,9 +18,9 @@ public class TestList {
         
         ListFile file = FileManager.construct("test\\me\\amrv\\testing\\files\\file.list").asListFile();
         file.add("add");
-        file.add(null);
+        file.add("add-1");
         
         file.add("add-index", 0);
-        file.save();
+        file.save(SaveMode.APPEND);
     }
 }
