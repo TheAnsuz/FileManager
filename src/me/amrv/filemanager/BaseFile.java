@@ -855,7 +855,7 @@ abstract class BaseFile {
      * @return true if the operation was succesful, false otherwise
      */
     public final boolean save() {
-        return save(true);
+        return save(SaveMode.OVERWRITE);
     }
 
     /**
@@ -883,15 +883,21 @@ abstract class BaseFile {
      * sometimes faster on newer computers due to the use of buffers
      * @return true if the operation was succesful, false otherwise
      */
-    public final boolean save(boolean alternative) {
+    public final boolean save(SaveMode mode) {
         if (!file.canWrite())
             return false;
 
         try {
-            if (alternative)
-                return writeProcessNormal();
-            else
-                return writeProcessAdvanced();
+            switch (mode) {
+                case OVERWRITE:
+                    return writeProcessAdvanced();
+                case LEGACY_OVERWRITE:
+                    return writeProcessNormal();
+                case APPEND:
+                    return writeProcessAppend();
+                default:
+                    return false;
+            }
         } catch (IOException e) {
 
             throw new RuntimeException(e);
@@ -926,7 +932,7 @@ abstract class BaseFile {
     abstract protected boolean writeProcessNormal() throws IOException;
 
     /**
-     * Protecte method to save the file information, this method gets executed
+     * Protected method to save the file information, this method gets executed
      * once all the checks for aviability are done.
      *
      * <p>
@@ -937,5 +943,20 @@ abstract class BaseFile {
      * @throws IOException if any error occurs while writing the file
      */
     abstract protected boolean writeProcessAdvanced() throws IOException;
+
+    /**
+     * Protected method to save the file information, this method gets executed
+     * once all the checks for aviability are done but wont rewrite the file
+     * contents, instead it will add whatever was stored on the virtual machine
+     * at the end of the contents of the file.
+     *
+     * <p>
+     * This method does not guarantee the most efficient method to write to the
+     * file.
+     *
+     * @return true if the write was completed, false otherwise
+     * @throws IOException if any error occurs while writing the file
+     */
+    abstract protected boolean writeProcessAppend() throws IOException;
 
 }
