@@ -34,11 +34,11 @@ public class ListFile extends BaseFile {
 
     @Override
     protected boolean readProcess() throws IOException {
+        if (content == null)
+            content =  new ArrayList<String>();
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
 
-            reader.lines().forEach(line -> {
-                content.add(line);
-            });
+            reader.lines().forEach(content::add);
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -63,6 +63,24 @@ public class ListFile extends BaseFile {
     @Override
     protected boolean writeProcessAdvanced() throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+
+            for (String str : content) {
+                writer.write(str);
+                writer.newLine();
+            }
+
+            writer.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+    
+    @Override
+    protected boolean writeProcessAppend() throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file,true))) {
 
             for (String str : content) {
                 writer.write(str);
