@@ -56,6 +56,18 @@ public final class PlainFile extends BaseFile {
         }
     }
 
+    @Override
+    protected boolean writeProcessAppend() throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file,true))) {
+            writer.write(content.toString());
+            writer.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
     /**
      * Obtains the data in the file as a StringBuilder, which should be better
      * than a simple String.
@@ -84,7 +96,7 @@ public final class PlainFile extends BaseFile {
      * @param string - the StringBuilder that will be used to replace the
      * current file contents
      */
-    public void setData(StringBuilder string) {
+    public void set(StringBuilder string) {
         content = string;
     }
 
@@ -95,7 +107,7 @@ public final class PlainFile extends BaseFile {
      * @param string - the String that will replace the actual contents of the
      * file
      */
-    public void setData(String string) {
+    public void set(String string) {
         content = new StringBuilder(string);
     }
 
@@ -115,6 +127,15 @@ public final class PlainFile extends BaseFile {
     public void append(Object obj) {
         content.append(obj);
     }
+    
+    /**
+     * Adds the given string at the end of the file.
+     *
+     * @param str - the string that will be added to the file
+     */
+    public void append(String str) {
+        content.append(str);
+    }
 
     /**
      * Obtains the length of the stored contents of the file.
@@ -124,5 +145,6 @@ public final class PlainFile extends BaseFile {
     public int length() {
         return content.length();
     }
+
 
 }
