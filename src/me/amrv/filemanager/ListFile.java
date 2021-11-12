@@ -35,7 +35,7 @@ public class ListFile extends BaseFile {
     @Override
     protected boolean readProcess() throws IOException {
         if (content == null)
-            content =  new ArrayList<String>();
+            content = new ArrayList<String>();
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
 
             reader.lines().forEach(content::add);
@@ -49,9 +49,10 @@ public class ListFile extends BaseFile {
     @Override
     protected boolean writeProcessNormal() throws IOException {
         try (PrintWriter writer = new PrintWriter(file)) {
-            content.forEach(string -> {
+            content.subList(0, content.size() - 1).forEach(string -> {
                 writer.println(string);
             });
+            writer.print(content.get(content.size() - 1));
             writer.close();
             return true;
         } catch (IOException e) {
@@ -64,11 +65,11 @@ public class ListFile extends BaseFile {
     protected boolean writeProcessAdvanced() throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
 
-            for (String str : content) {
+            for (String str : content.subList(0, content.size() - 1)) {
                 writer.write(str);
                 writer.newLine();
             }
-
+            writer.write(content.get(content.size() - 1));
             writer.close();
             return true;
         } catch (IOException e) {
@@ -77,16 +78,17 @@ public class ListFile extends BaseFile {
         }
 
     }
-    
+
     @Override
     protected boolean writeProcessAppend() throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file,true))) {
-
-            for (String str : content) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
+            if (this.size() > 0)
+                writer.newLine();
+            for (String str : content.subList(0, content.size() - 1)) {
                 writer.write(str);
                 writer.newLine();
             }
-
+            writer.write(content.get(content.size() - 1));
             writer.close();
             return true;
         } catch (IOException e) {
