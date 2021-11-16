@@ -14,26 +14,26 @@ import me.amrv.filemanager.SaveMode;
  * @author marruiad
  */
 public class AppendMode {
-    
+
     public static void main(String[] args) {
-        
+
         PlainFile file = FileManager.construct("D:\\plain.file").asPlainFile();
-        
+
         file.set("Hola mundo");
-        
+
         for (int i = 0; i < 100; i++)
             file.save(SaveMode.APPEND);
-        
+
         System.out.println("DONE - plain");
-        
+
         ListFile list = FileManager.construct("D:\\list.file").asListFile();
-        
+
         list.add("Hola buenos dias");
-        
+
         for (int i = 0; i < 100; i++)
             list.save(SaveMode.APPEND);
-        
+
         System.out.println("DONE - list");
     }
-    
+
 }

@@ -103,15 +103,15 @@ abstract class BaseFile {
         for (int i = parent.length() - 1; i >= 0; i--) {
             final char c = parent.charAt(i);
 
-			if (c == SEPARATOR) {
-				if (remove > 0) {
-					remove--;
-					continue;
-				}
-				index++;
-				if (amount >= 0 && index > amount)
-					break;
-			}
+            if (c == SEPARATOR) {
+                if (remove > 0) {
+                    remove--;
+                    continue;
+                }
+                index++;
+                if (amount >= 0 && index > amount)
+                    break;
+            }
             if (c == SEPARATOR) {
                 if (remove > 0) {
                     remove--;
@@ -522,9 +522,9 @@ abstract class BaseFile {
         return file.exists();
     }
 
-	public final boolean rename(String name) {
-		final File renamed = new File(file.getPath().replace(file.getName(), name));
-		return file.renameTo(renamed);
+    public final boolean rename(String name) {
+        final File renamed = new File(file.getPath().replace(file.getName(), name));
+        return file.renameTo(renamed);
 //		this.file = file;
 //		if (file.getName().contains(".")) {
 //			extension = file.getName().substring(file.getName().lastIndexOf('.') + 1);
@@ -533,8 +533,8 @@ abstract class BaseFile {
 //		}
 //		attribute = Files.getFileAttributeView(file.toPath(), BasicFileAttributeView.class);
 //		reload();
-	}
-	
+    }
+
     /**
      * Checks if the pathname of the file is absolute, meaning that will return
      * true if at the time the file was defined it was used a path that started
@@ -907,6 +907,8 @@ abstract class BaseFile {
                     return writeProcessNormal();
                 case APPEND:
                     return writeProcessAppend();
+                case LEGACY_APPEND:
+                    return writeProcessAppendAdvanced();
                 default:
                     return false;
             }
@@ -970,5 +972,20 @@ abstract class BaseFile {
      * @throws IOException if any error occurs while writing the file
      */
     abstract protected boolean writeProcessAppend() throws IOException;
+
+    /**
+     * Protected method to save the file information, this method gets executed
+     * once all the checks for aviability are done but wont rewrite the file
+     * contents, instead it will add whatever was stored on the virtual machine
+     * at the end of the contents of the file.
+     *
+     * <p>
+     * This method uses a newer functionallity and most of the times buffered
+     * writting.
+     *
+     * @return true if the write was completed, false otherwise
+     * @throws IOException if any error occurs while writing the file
+     */
+    abstract protected boolean writeProcessAppendAdvanced() throws IOException;
 
 }

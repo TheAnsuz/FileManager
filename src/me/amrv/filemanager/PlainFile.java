@@ -58,7 +58,7 @@ public final class PlainFile extends BaseFile {
 
     @Override
     protected boolean writeProcessAppend() throws IOException {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file,true))) {
+        try (FileWriter writer = new FileWriter(file, true)) {
             writer.write(content.toString());
             writer.close();
             return true;
@@ -67,7 +67,19 @@ public final class PlainFile extends BaseFile {
             return false;
         }
     }
-    
+
+    @Override
+    protected boolean writeProcessAppendAdvanced() throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
+            writer.write(content.toString());
+            writer.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     /**
      * Obtains the data in the file as a StringBuilder, which should be better
      * than a simple String.
@@ -127,7 +139,7 @@ public final class PlainFile extends BaseFile {
     public void append(Object obj) {
         content.append(obj);
     }
-    
+
     /**
      * Adds the given string at the end of the file.
      *
@@ -145,6 +157,5 @@ public final class PlainFile extends BaseFile {
     public int length() {
         return content.length();
     }
-
 
 }

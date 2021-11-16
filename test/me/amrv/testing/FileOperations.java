@@ -4,14 +4,12 @@ import java.io.File;
 import java.util.Scanner;
 import me.amrv.filemanager.FileManager;
 import me.amrv.filemanager.PlainFile;
-import me.amrv.filemanager.SafeFileOperation;
 
 public class FileOperations {
 
     private static final Scanner scan = new Scanner(System.in);
 
     @SuppressWarnings("deprecation")
-    @SafeFileOperation
     public static void main(String[] args) {
         int lasts = 3;
 //        System.out.println(">>>"+System.getProperty("user.dir"));
