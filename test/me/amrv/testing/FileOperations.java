@@ -50,8 +50,19 @@ public class FileOperations {
             file.setCreationTime(-922337203685477580l);
             file.setLastModifiedTime(0l);
             file.setLastAccessTime(922337203685477580l);
+            file.queueForDelete(true);
+            file.rename("newname.newfile");
+            System.out.println("Nombre completo: " + file.getFullName());
+            System.out.println("Nombre corto: " + file.getShortName());
+            System.out.println("Extension: " + file.getExtension());
+            System.out.println("Path: " + file.getPath());
+            System.out.println("Abstract path: " + file.getAbstractPath());
+            System.out.println("Cannonicalized: " + file.getCannonicalPath());
+            System.out.println(lasts + " lasts: " + file.getPathSection(lasts));
+            System.out.println("Parent: " + file.getParent());
 //            file.queueForDelete(true);
 //            file.rename("newname.newfile");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
