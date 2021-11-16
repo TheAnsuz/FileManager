@@ -16,6 +16,7 @@ public class Paths {
 	 * User directory:
 	 *     windows: %disk%:\Users\%username%
      */
+    protected static final String TEST = "test\\me\\amrv\\testing\\files\\";
     public static void main(String[] args) {
 
         System.out.println("ALL_USER_DATA_PATH " + FilePath.ALL_USER_DATA_PATH);

@@ -25,6 +25,7 @@ public class ListFile extends BaseFile {
 
     public ListFile(File file) {
         super(file);
+        content = new ArrayList<>();
     }
 
     @Override
@@ -36,6 +37,8 @@ public class ListFile extends BaseFile {
     protected boolean readProcess() throws IOException {
         if (content == null)
             content = new ArrayList<>();
+        else
+            content.clear();
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
 
             reader.lines().forEach(content::add);

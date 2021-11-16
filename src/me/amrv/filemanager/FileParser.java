@@ -69,4 +69,17 @@ public final class FileParser {
         }
     }
 
+    /**
+     * Creates an instance of a Map file wich will format the source in a
+     * map-like file, in example: {@code key = value}, however the file
+     * separator can be choosen manually.s
+     * @return 
+     */
+    public MapFile asMapFile() {
+        if (checkFormat()) {
+            return new MapFile(file);
+        } else
+            throw new InvalidFileFormat("Plain file does not support ." + extension + " file formats");
+    }
+
 }
