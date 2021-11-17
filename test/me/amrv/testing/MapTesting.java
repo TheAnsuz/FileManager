@@ -17,9 +17,10 @@ public class MapTesting {
         
         MapFile map = FileManager.construct(Paths.TEST + "file.map").asMapFile();
         
-        map.getSource().forEach((String k, String v)-> {
-            System.out.println(k + " = " + v);
-        });
+        map.getSource();
+//        map.getSource().forEach((String k, String v)-> {
+//            System.out.println(k + " = " + v);
+//        });
         
     }
     

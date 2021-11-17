@@ -17,12 +17,11 @@ import java.util.Map;
  */
 public class MapFile extends BaseFile {
 
-    private Map<String, String> content;
+    private Map<String, String> content =  new HashMap<>();
     private final char SEPARATOR = '=';
     
     public MapFile(File file) {
         super(file);
-        content = new HashMap<>();
     }
 
     @Override
@@ -39,11 +38,10 @@ public class MapFile extends BaseFile {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
 
             reader.lines().forEach((String line) -> {
-                System.out.println(line);
-                if (line.contains(SEPARATOR+""))
-                    content.put(line.substring(0, line.indexOf(SEPARATOR)), line.substring(line.indexOf(SEPARATOR)));
-                else
-                    content.put(line, "");
+                System.out.print(line);
+                content.put(line, "a");
+                System.out.print(" - " + content.size());
+                System.out.println();
             });
             reader.close();
             return true;
@@ -54,6 +52,10 @@ public class MapFile extends BaseFile {
     }
 
     public Map<String, String> getSource() {
+        System.out.println(content.size());
+        content.forEach((String k, String v)-> {
+            System.out.println(k + " ---- " + v);
+        });
         return content;
     }
 
