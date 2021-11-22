@@ -4,6 +4,7 @@
  */
 package me.amrv.testing;
 
+import java.util.Map;
 import me.amrv.filemanager.FileManager;
 import me.amrv.filemanager.MapFile;
 
@@ -15,13 +16,14 @@ public class MapTesting {
     
     public static void main(String[] args) {
         
-        MapFile map = FileManager.construct(Paths.TEST + "file.map").asMapFile();
-        
-        map.getSource();
-//        map.getSource().forEach((String k, String v)-> {
-//            System.out.println(k + " = " + v);
-//        });
-        
+        MapFile map = FileManager.construct(Paths.TEST + "file.map").asMapFile("=");
+        map.reload();
+        Map<String,String> mapa = map.getSource();
+        mapa.forEach((String k, String v)-> {
+            System.out.println(k + "$$" + v);
+        });
+        System.out.println();
+        System.out.println("prueba: " + mapa.get("prueba de "));
     }
     
 }

@@ -51,7 +51,7 @@ abstract class BaseFile {
             extension = "";
         }
         attribute = Files.getFileAttributeView(file.toPath(), BasicFileAttributeView.class);
-        reload();
+//        reload();
     }
 
     /**

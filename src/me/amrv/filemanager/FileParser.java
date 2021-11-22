@@ -71,13 +71,30 @@ public final class FileParser {
 
     /**
      * Creates an instance of a Map file wich will format the source in a
-     * map-like file, in example: {@code key = value}, however the file
-     * separator can be choosen manually.s
-     * @return 
+     * map-like file, in example: {@code key = value}, this methods allows the
+     * user to change the separator that will be used to determinate the keys
+     * and values of the map.
+     *
+     * @return
+     */
+    public MapFile asMapFile(String valueSeparator) {
+        if (valueSeparator == null || valueSeparator.length() <= 0)
+            valueSeparator = " ";
+        if (checkFormat()) {
+            return new MapFile(file, valueSeparator);
+        } else
+            throw new InvalidFileFormat("Plain file does not support ." + extension + " file formats");
+    }
+
+    /**
+     * Creates an instance of a Map file wich will format the source in a
+     * map-like file, in example: {@code key = value}.
+     *
+     * @return
      */
     public MapFile asMapFile() {
         if (checkFormat()) {
-            return new MapFile(file);
+            return new MapFile(file, "=");
         } else
             throw new InvalidFileFormat("Plain file does not support ." + extension + " file formats");
     }
