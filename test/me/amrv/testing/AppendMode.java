@@ -29,11 +29,12 @@ public class AppendMode {
         ListFile list = FileManager.construct("D:\\list.file").asListFile();
 
         list.add("Hola buenos dias");
-
+        list.save(SaveMode.APPEND);
         for (int i = 0; i < 100; i++)
             list.save(SaveMode.APPEND);
 
         System.out.println("DONE - list");
+        
     }
 
 }
