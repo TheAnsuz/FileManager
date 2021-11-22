@@ -13,6 +13,10 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+/**
+ *
+ * @author Ansuz, aka Adrian MRV
+ */
 abstract class BaseFile {
 
     /*
@@ -37,7 +41,7 @@ abstract class BaseFile {
     /**
      * Creates a easy to manage formatted file using the given file
      *
-     * @param file - the file to be managed and formatted
+     * @param file the file to be managed and formatted
      */
     protected BaseFile(final File file) {
         this.file = file;
@@ -87,12 +91,12 @@ abstract class BaseFile {
      * of link files
      *
      *
-     * @param parent - the abstract or full path of the file that will be used
+     * @param parent the abstract or full path of the file that will be used
      * on conversion
-     * @param amount - the amount of subfolders the method will format before
+     * @param amount the amount of subfolders the method will format before
      * ending, use <b>-1</b> to canonicalize the full path, the amount of
      * sections to handle starts from the end of the path
-     * @param addFileName - if the cannonical path should include the file name
+     * @param addFileName if the cannonical path should include the file name
      * or start with the first section of the path
      * @return a cannonical like conversion of the path
      */
@@ -267,7 +271,7 @@ abstract class BaseFile {
      * If you want to get a section of the path without the file name in it, use
      * {@code getParentSection()}
      *
-     * @param section - the amount of sub folders to obtain
+     * @param section the amount of sub folders to obtain
      * @return a section of the cannonical path of the file
      */
     public final String getPathSection(final int section) {
@@ -342,7 +346,7 @@ abstract class BaseFile {
      * If you want to get a section of the path including the file name in it,
      * use {@code getPathSection()}
      *
-     * @param section - the amount of sub folders to obtain
+     * @param section the amount of sub folders to obtain
      * @return a section of the cannonical parent of the file
      */
     public final String getParentSection(int section) {
@@ -423,7 +427,7 @@ abstract class BaseFile {
      * <p>
      * This method works as {@code setExecutable(executable, true)}
      *
-     * @param executable - if the file should be able to be executed or not
+     * @param executable if the file should be able to be executed or not
      */
     public final void setExecutable(boolean executable) {
         file.setExecutable(executable, true);
@@ -434,8 +438,8 @@ abstract class BaseFile {
      * not, however this does not mean that it will make any file become a
      * executable or vice versa
      *
-     * @param executable - if the file should be able to be executed or not
-     * @param ownerOnly - if this operation should be applied to the current
+     * @param executable if the file should be able to be executed or not
+     * @param ownerOnly if this operation should be applied to the current
      * user/owner or to everybody
      */
     public final void setExecutable(boolean executable, boolean ownerOnly) {
@@ -459,7 +463,7 @@ abstract class BaseFile {
      * <p>
      * This method works as {@code setReadable(readable, true)}
      *
-     * @param readable - if the file should be able to do read operations
+     * @param readable if the file should be able to do read operations
      */
     public final void setReadable(boolean readable) {
         file.setReadable(readable, true);
@@ -469,8 +473,8 @@ abstract class BaseFile {
      * Changes the readable flag of the file allowing or disallowing it to do
      * read operations
      *
-     * @param readable - if the file should be able to do read operations or not
-     * @param ownerOnly - if this operation should be applied to the current
+     * @param readable if the file should be able to do read operations or not
+     * @param ownerOnly if this operation should be applied to the current
      * user/owner or to everybody
      */
     public final void setReadable(boolean readable, boolean ownerOnly) {
@@ -494,7 +498,7 @@ abstract class BaseFile {
      * <p>
      * This method works as {@code setWritable(writable, true)}
      *
-     * @param writable - if the file should be able to do read operations
+     * @param writable if the file should be able to do read operations
      */
     public final void setWritable(boolean writable) {
         file.setWritable(writable, true);
@@ -504,9 +508,9 @@ abstract class BaseFile {
      * Changes the writable flag of the file allowing or disallowing it to do
      * write operations
      *
-     * @param writable - if the file should be able to do write operations or
+     * @param writable if the file should be able to do write operations or
      * not
-     * @param ownerOnly - if this operation should be applied to the current
+     * @param ownerOnly if this operation should be applied to the current
      * user/owner or to everybody
      */
     public final void setWritable(boolean writable, boolean ownerOnly) {
@@ -525,14 +529,6 @@ abstract class BaseFile {
     public final boolean rename(String name) {
         final File renamed = new File(file.getPath().replace(file.getName(), name));
         return file.renameTo(renamed);
-//		this.file = file;
-//		if (file.getName().contains(".")) {
-//			extension = file.getName().substring(file.getName().lastIndexOf('.') + 1);
-//		} else {
-//			extension = "";
-//		}
-//		attribute = Files.getFileAttributeView(file.toPath(), BasicFileAttributeView.class);
-//		reload();
     }
 
     /**
@@ -656,7 +652,7 @@ abstract class BaseFile {
      * {@code deleteOnExit()} except this allows to cancel the operation before
      * the file gets removed
      *
-     * @param delete - if the file should be queued or not
+     * @param delete if the file should be queued or not
      */
     public final void queueForDelete(boolean delete) {
         checkRemoveQueue();
@@ -707,7 +703,7 @@ abstract class BaseFile {
     /**
      * Sets the time in miliseconds since the file was last modified.
      *
-     * @param miliseconds - the time to be set as last modified time
+     * @param miliseconds the time to be set as last modified time
      */
     public final void setLastModifiedTime(long miliseconds) {
         file.setLastModified(miliseconds);
@@ -750,7 +746,7 @@ abstract class BaseFile {
      * <p>
      * Some systems may not save this value on files.
      *
-     * @param miliseconds - the time to be set as last modified time
+     * @param miliseconds the time to be set as last modified time
      * @throws UnsupportedOperationException if the file attributes couldnt be
      * obtained
      */
@@ -802,7 +798,7 @@ abstract class BaseFile {
      * <p>
      * Some systems may not save this value on files.
      *
-     * @param miliseconds - the time to be set as last accessed time
+     * @param miliseconds the time to be set as last accessed time
      * @throws UnsupportedOperationException if the file attributes couldnt be
      * obtained
      */
@@ -827,9 +823,10 @@ abstract class BaseFile {
         return file.getPath();
     }
 
-    // ################################################################
-    // ## Funcionalidad de lectura y escritura ##
-    // ################################################################
+    // ##################################################################
+    // ## Funcionalidad de lectura y escritura ##                      ##
+    // ##################################################################
+    
     /**
      * Reloads the current information from the file, obtainin it again from the
      * file itself and formatting it, this will override every contents that the
@@ -891,7 +888,7 @@ abstract class BaseFile {
      * depending on how do they use streams to save files, also runtime
      * exceptions may be thrown for debugging purposes.
      *
-     * @param alternative - if the save operation should use a modern method,
+     * @param mode if the save operation should use a modern method,
      * sometimes faster on newer computers due to the use of buffers
      * @return true if the operation was succesful, false otherwise
      */
