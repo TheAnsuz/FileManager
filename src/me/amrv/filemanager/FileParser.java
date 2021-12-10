@@ -71,11 +71,14 @@ public final class FileParser {
 
     /**
      * Creates an instance of a Map file wich will format the source in a
-     * map-like file, in example: {@code key = value}, this methods allows the
+     * map-like file, in example: <tt>key = value</tt>, this methods allows the
      * user to change the separator that will be used to determinate the keys
      * and values of the map.
      *
-     * @return
+     * @param valueSeparator the character or string that will being used to
+     * separate keys from values    
+     * @return a new MapFile object
+     * @see java.util.Map
      */
     public MapFile asMapFile(String valueSeparator) {
         if (valueSeparator == null || valueSeparator.length() <= 0)
@@ -88,9 +91,10 @@ public final class FileParser {
 
     /**
      * Creates an instance of a Map file wich will format the source in a
-     * map-like file, in example: {@code key = value}.
+     * map-like file, in example: <tt>key = value</tt>.
      *
-     * @return
+     * @return a new MapFile object
+     * @see java.util.Map
      */
     public MapFile asMapFile() {
         if (checkFormat()) {

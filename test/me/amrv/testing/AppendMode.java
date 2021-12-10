@@ -16,7 +16,9 @@ import me.amrv.filemanager.SaveMode;
 public class AppendMode {
 
     public static void main(String[] args) {
-
+        
+        System.exit(0);
+        
         PlainFile file = FileManager.construct("D:\\plain.file").asPlainFile();
 
         file.set("Hola mundo");

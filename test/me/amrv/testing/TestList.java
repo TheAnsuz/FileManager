@@ -12,26 +12,39 @@ import me.amrv.filemanager.SaveMode;
  *
  * @author marruiad
  */
-public class TestList {
+public class TestList{
 
     public static void main(String[] args) {
 
         try {
             ListFile file = FileManager.construct("test\\me\\amrv\\testing\\files\\file.list").asListFile();
 //            file.clear();
+            file.add("===INICIO==");
             file.add("add0");
-            file.add("add1");
+            file.add(null);
             file.add("add2");
-            file.add("add-index-0", 0);
-            file.save(SaveMode.APPEND);
-
+            file.add("=Item");
+            file.add("=Item");
+            file.add("=Item");
+            file.add("=Item");
+            file.add("=Item");
+            file.add("=Item");
+            file.add("=Item");
+            file.add(null);
+            file.add("=Item");
+            file.add("=Item");
+            file.add("add-index-0", 1);
+            file.add("===FINAL===");
+            file.removeLast("=Item");
+            file.save(SaveMode.OVERWRITE);
             System.out.println("NULL: " + file.contains(null));
             System.out.println("INDEX: " + file.indexOf(null));
-
             for (String str : file.toArray())
-                System.out.println(str);
+                    System.out.println("> " + ((str.equals("")) ? "$null" : str) + " <");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
     }
 }

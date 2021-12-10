@@ -223,9 +223,9 @@ abstract class BaseFile {
      * <p>
      * In example a file at <b>temp/files/file.info</b> but declared as
      * <b>file.info</b> wont return the whole path, if you want the whole path
-     * use {@code getAbstractPath()} or {@code getCannonicalPath()} and if you
+     * use <tt>getAbstractPath()</tt> or <tt>getCannonicalPath()</tt> and if you
      * want just the path to reach the file without the file name use
-     * {@code getParent()} or {@code getLastParent()}
+     * <tt>getParent()</tt> or <tt>getLastParent()</tt>
      *
      * @return the whole path among the full name of the file that was used to
      * define the file, if no path was given it will return the file whole name
@@ -247,12 +247,12 @@ abstract class BaseFile {
      * located inside <b>temp\file.info</b> and the abstract path will return
      * <b>temp\files\..\file.info</b>
      * <p>
-     * To get the real path use {@code getCannonicalPath()} however this is not
-     * always needed or use {@code getPath()} to obtain the path that was used
+     * To get the real path use <tt>getCannonicalPath()</tt> however this is not
+     * always needed or use <tt>getPath()</tt> to obtain the path that was used
      * to define the file.
      * <p>
-     * If you want to get the path without the file name use {@code getParent()}
-     * or {@code getLastParent()}
+     * If you want to get the path without the file name use <tt>getParent()</tt>
+     * or <tt>getLastParent()</tt>
      *
      * @return the relative path that was given in the declaration concatenated
      * with the path from the disk to the file
@@ -264,11 +264,11 @@ abstract class BaseFile {
     /**
      * Gets a section of the cannonical path of the file from the disk, in
      * example, a file with the path <b>temp/folder/data/file</b> and a section
-     * of {@code 2} will return <b>folder/data/file</b>
+     * of <tt>2</tt> will return <b>folder/data/file</b>
      *
      * <p>
      * If you want to get a section of the path without the file name in it, use
-     * {@code getParentSection()}
+     * <tt>getParentSection()</tt>
      *
      * @param section the amount of sub folders to obtain
      * @return a section of the cannonical path of the file
@@ -301,7 +301,7 @@ abstract class BaseFile {
     // raiz en la que esta situado el archivo
     // raiz de temp/data/archivo.txt -> temp/data
     /**
-     * Works as {@code getPath()}, meaning that it will return the path to reach
+     * Works as <tt>getPath()</tt>, meaning that it will return the path to reach
      * the file from the current location but it will contain only the path not
      * the file itself. If the file was declared without any path this will
      * return an empty string as it wont recognize any folder needed to reach
@@ -315,7 +315,7 @@ abstract class BaseFile {
     }
 
     /**
-     * Works as {@code getAbsolutePath()} but it will return the path from the
+     * Works as <tt>getAbsolutePath()</tt> but it will return the path from the
      * disk to the previous folder of the file, meaning that the name of the
      * file wont be given on the returned string
      *
@@ -327,7 +327,7 @@ abstract class BaseFile {
 
     /**
      * Retrieves the last folder to reach the file working as
-     * {@code getWholeParent()} but returning only the last section of the path
+     * <tt>getWholeParent()</tt> but returning only the last section of the path
      * almost as a section of the cannonical path
      *
      * @return the last section of the path to reach the file
@@ -339,11 +339,11 @@ abstract class BaseFile {
     /**
      * Gets a section of the cannonical parent of the file from the disk, in
      * example, a file with the path <b>temp/folder/data/file</b> and a section
-     * of {@code 2} will return <b>folder/data</b>
+     * of <tt>2</tt> will return <b>folder/data</b>
      *
      * <p>
      * If you want to get a section of the path including the file name in it,
-     * use {@code getPathSection()}
+     * use <tt>getPathSection()</tt>
      *
      * @param section the amount of sub folders to obtain
      * @return a section of the cannonical parent of the file
@@ -360,7 +360,7 @@ abstract class BaseFile {
      * measured. However this method is not completely accurate
      * <p>
      * Values over <b>8388608 Terabytes</b> might cause errors and if the size
-     * is greater than {@code Long.MAX_VALUE} then that value will be returned
+     * is greater than <tt>Long.MAX_VALUE</tt> then that value will be returned
      *
      * @return the amount of free space, in bytes
      */
@@ -374,7 +374,7 @@ abstract class BaseFile {
      * However this method is not completely accurate
      * <p>
      * Values over <b>8388608 Terabytes</b> might cause errors and if the size
-     * is greater than {@code Long.MAX_VALUE} then that value will be returned
+     * is greater than <tt>Long.MAX_VALUE</tt> then that value will be returned
      *
      * @return the total space on the disk, in bytes
      */
@@ -383,10 +383,10 @@ abstract class BaseFile {
     }
 
     /**
-     * Obtains the file of the size in bytes of the file or {@code 0L} if the
+     * Obtains the file of the size in bytes of the file or <tt>0L</tt> if the
      * size cant be measured
      *
-     * @return the size in bytes of the file or {@code 0L} if it cant be
+     * @return the size in bytes of the file or <tt>0L</tt> if it cant be
      * measured
      */
     public final long getFileSpace() {
@@ -398,7 +398,7 @@ abstract class BaseFile {
      * providing a more accurate measure
      * <p>
      * Values over <b>8388608 Terabytes</b> might cause errors and if the size
-     * is greater than {@code Long.MAX_VALUE} then that value will be returned
+     * is greater than <tt>Long.MAX_VALUE</tt> then that value will be returned
      *
      * @return the aviable space the virtual machine can access in bytes
      */
@@ -424,7 +424,7 @@ abstract class BaseFile {
      * not, however this does not mean that it will make any file become a
      * executable or vice versa
      * <p>
-     * This method works as {@code setExecutable(executable, true)}
+     * This method works as <tt>setExecutable(executable, true)</tt>
      *
      * @param executable if the file should be able to be executed or not
      */
@@ -460,7 +460,7 @@ abstract class BaseFile {
      * Changes the readable flag of the file allowing or disallowing it to do
      * read operations
      * <p>
-     * This method works as {@code setReadable(readable, true)}
+     * This method works as <tt>setReadable(readable, true)</tt>
      *
      * @param readable if the file should be able to do read operations
      */
@@ -495,7 +495,7 @@ abstract class BaseFile {
      * Changes the writable flag of the file allowing or disallowing it to do
      * write operations
      * <p>
-     * This method works as {@code setWritable(writable, true)}
+     * This method works as <tt>setWritable(writable, true)</tt>
      *
      * @param writable if the file should be able to do read operations
      */
@@ -599,11 +599,11 @@ abstract class BaseFile {
      * operation to be acomplished).
      * <p>
      * If you wish to remove a directory even if its not empty, use
-     * {@code forceDelete()}.
+     * <tt>forceDelete()</tt>.
      * <p>
      * An IOException could be thrown if a severe problem happens, useful for
      * debugging purposes, however if the operation cant just be acoplished, it
-     * will just return {@code false}.
+     * will just return <tt>false</tt>.
      *
      * @return true if the operation was successfully completed false otherwise
      */
@@ -617,7 +617,7 @@ abstract class BaseFile {
      *
      * <p>
      * If you want the operation to not remove directories which are not empty,
-     * you can use {@code delete()}.
+     * you can use <tt>delete()</tt>.
      *
      * @return true is the operation was successfully completed
      */
@@ -637,7 +637,7 @@ abstract class BaseFile {
     /**
      * Deletes the file or directory when the virtual machine aka program ends
      * normally, once the deletion is requested and put to queue there is no way
-     * to cancel it, except from that this work like {@code delete()}.
+     * to cancel it, except from that this work like <tt>delete()</tt>.
      * <p>
      * If multiple files are queued to deletion, they will attempt to be removed
      * on the inverse order they were queued.
@@ -648,7 +648,7 @@ abstract class BaseFile {
 
     /**
      * Puts or removes this file on a queue for removal, works exactly like
-     * {@code deleteOnExit()} except this allows to cancel the operation before
+     * <tt>deleteOnExit()</tt> except this allows to cancel the operation before
      * the file gets removed
      *
      * @param delete if the file should be queued or not

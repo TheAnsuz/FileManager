@@ -65,10 +65,10 @@ public final class FileManager {
     }
 
     /**
-     * Obtains the respective {@code FileParser} given the name of the file that
+     * Obtains the respective <tt>FileParser</tt> given the name of the file that
      * must be obtained.
      *
-     * @param name - the name of the file to be used for
+     * @param name the name of the file to be used for
      * @return a raw FileParser
      */
     public static FileParser obtain(String name) {
@@ -76,10 +76,10 @@ public final class FileManager {
     }
 
     /**
-     * Obtains the respective {@code FileParser} of the given file without any
+     * Obtains the respective <tt>FileParser</tt> of the given file without any
      * checks of existance.
      *
-     * @param file - the file to obtain the {@code FileParser} from
+     * @param file the file to obtain the {@code FileParser} from
      * @return a raw FileParser
      */
     public static FileParser obtain(File file) {
@@ -88,9 +88,9 @@ public final class FileManager {
 
     /**
      * Makes sure the file with the given name exists or at least can be created
-     * before creating the {@code FileParser} from it.
+     * before creating the <tt>FileParser</tt> from it.
      *
-     * @param name - the name of the file that will be checked and obtained
+     * @param name the name of the file that will be checked and obtained
      * @return a safer FileParser
      */
     public static FileParser construct(String name) {
@@ -99,9 +99,9 @@ public final class FileManager {
 
     /**
      * Makes sure the file exists or at least can be created before creating the
-     * {@code FileParser} from it.
+     * <tt>FileParser</tt> from it.
      *
-     * @param file - the file that will be checked and obtained
+     * @param file the file that will be checked and obtained
      * @return a safer FileParser
      */
     public static FileParser construct(File file) {
@@ -126,6 +126,11 @@ public final class FileManager {
     // o en caso de que sea una carpeta accede al archivo con mas posibilidad de
     // compatibilidad (null, txt, config...)
     /**
+     * Checks the path for a file or folder and tries to convert links to avoid
+     * link errors.
+     * 
+     * @param file the file/path that will be searched
+     * @return a safe FileParser
      * @throws UnsupportedOperationException as this is not yet implemented on
      * this version of the code
      */
