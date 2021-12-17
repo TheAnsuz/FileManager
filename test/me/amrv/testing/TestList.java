@@ -15,7 +15,6 @@ import me.amrv.filemanager.SaveMode;
 public class TestList{
 
     public static void main(String[] args) {
-
         try {
             ListFile file = FileManager.construct("test\\me\\amrv\\testing\\files\\file.list").asListFile();
 //            file.clear();
