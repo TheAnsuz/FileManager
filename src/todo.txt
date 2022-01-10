@@ -12,3 +12,68 @@ Comprobar cual es el mejor metodo para escribir en archivos:
     # PrintWriter
 Comprobar cual es mejor metodo para leer archivos
 Cambiar documentacion de PlainFile y ListFile para que en vez de poner string o List ponga file
+
+####################################################################
+##																  ##
+##				Resultados velocidad de lectura					  ##
+##															      ##
+####################################################################
+
+||==== smallTest.txt ==== 1508 Bytes  ====||
+1508c -fileReader...................4.8826ms
+1508c -fileInputStream..............0.3196ms  <-
+1508c -bufferedReader...............2.1694ms
+1508c -advancedBufferedReader.......0.4731ms
+1508c -inputStreamReader............0.6293ms
+1508c -files........................5.997ms
+1508c -scanner......................38.1774ms
+
+
+||==== mediumTest.txt ==== 150150 Bytes  ====||
+150150c -fileReader.................76.498ms
+150150c -fileInputStream............0.6997ms  <-
+150150c -bufferedReader.............19.7705ms
+150150c -advancedBufferedReader.....1.6506ms
+150150c -inputStreamReader..........9.9624ms
+150150c -files......................1.4315ms
+150150c -scanner....................87.7278ms
+
+
+||==== largeTest.txt ==== 1505790 Bytes  ====||
+1505790c -fileReader................166.5891ms
+1505790c -fileInputStream...........2.3347ms
+1505790c -bufferedReader............98.1463ms
+1505790c -advancedBufferedReader....6.2642ms
+1505790c -inputStreamReader.........9.556ms
+1505790c -files.....................2.0936ms  <-
+1505790c -scanner...................302.3803ms
+
+
+||==== insaneTest.txt ==== 10540530 Bytes  ====||
+10540530c -fileReader...............794.6179ms
+10540530c -fileInputStream..........11.1267ms  <-
+10540530c -bufferedReader...........596.297ms
+10540530c -advancedBufferedReader...31.2225ms
+10540530c -inputStreamReader........40.9119ms
+10540530c -files....................23.1773ms
+10540530c -scanner..................2069.2308ms
+
+
+||==== gigaTest.txt ==== 105405300 Bytes  ====||
+105405300c -fileReader..............8054.0278ms
+105405300c -fileInputStream.........117.9038ms  <-
+105405300c -bufferedReader..........6469.6566ms
+105405300c -advancedBufferedReader..1260.7042ms
+105405300c -inputStreamReader.......1051.9747ms
+105405300c -files...................1179.8958ms
+105405300c -scanner.................21271.5395ms
+
+
+||==== megaTest.txt ==== 1054053000 Bytes  ====||
+1054053000c -fileReader.............76048.537ms
+1054053000c -fileInputStream........47697.4112ms
+1054053000c -bufferedReader.........161194.7875ms
+1054053000c -advancedBufferedReader.2986.0484ms
+1054053000c -inputStreamReader......2242.7889ms
+1054053000c -files..................881.259ms  <-
+1054053000c -scanner................Error
